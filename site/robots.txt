@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /api/
 
-Sitemap: https://elementbymosk.ru/sitemap.xml
+Sitemap: https://elementconcept.ru/sitemap.xml
