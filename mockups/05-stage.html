@@ -1,0 +1,392 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ELEMENT by МОСК — Сцена</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;1,400;1,500&family=PT+Sans:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bone:#F1ECE3;
+  --wine:#5A1220;
+  --wine-deep:#400D17;
+  --ink:#171310;
+  --gold:#C99A3E;
+  --line:#D8CFC0;
+  --muted:#7C7266;
+  --gutter:clamp(18px,4vw,64px);
+  --display:"Oswald","PT Sans Narrow",Impact,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bone);color:var(--ink);
+  font-family:"PT Sans",system-ui,sans-serif;font-size:17px;line-height:1.62;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+
+.bebas{font-family:var(--display);font-weight:600;letter-spacing:.005em;line-height:.96}
+/* один общий регистр для всей плакатной гарнитуры */
+.bebas,.marq span,.ahead h3,.prg__act,.prg__name,.af__name,.pr__name,.box__big,.tk__go{
+  text-transform:uppercase;font-weight:600}
+.pf{font-family:"Playfair Display",Georgia,serif}
+.cap{font-family:"PT Sans",sans-serif;font-weight:700;font-size:11px;letter-spacing:.2em;text-transform:uppercase}
+.wrap{max-width:1360px;margin-inline:auto;padding-inline:var(--gutter)}
+.rule2{border-top:3px solid var(--ink);border-bottom:1px solid var(--ink);height:6px}
+
+/* ── playbill masthead ───────────────────── */
+.bill{padding-top:14px}
+.bill__top{display:flex;justify-content:space-between;gap:16px;padding-bottom:10px}
+.bill__name{text-align:center;padding-block:clamp(10px,2vh,22px)}
+.bill__name h1{font-size:clamp(30px,7.2vw,112px);text-wrap:balance}
+.bill__name .sub{font-family:"Playfair Display",serif;font-style:italic;font-size:clamp(15px,2vw,26px);
+  color:var(--wine);padding-top:6px}
+.bill__strip{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 26px;padding-block:12px}
+
+/* ── marquee ─────────────────────────────── */
+.marq{background:var(--wine);color:var(--bone);overflow:hidden;border-block:1px solid var(--wine-deep)}
+.marq__track{display:flex;gap:0;width:max-content;animation:run 34s linear infinite}
+.marq span{font-family:var(--display);font-size:clamp(15px,1.7vw,23px);letter-spacing:.06em;
+  padding:12px 26px;white-space:nowrap;display:inline-flex;align-items:center;gap:26px}
+.marq span::after{content:"✳";color:var(--gold);font-size:.6em}
+@keyframes run{to{transform:translateX(-50%)}}
+
+/* ── hero poster ─────────────────────────── */
+.poster{display:grid;grid-template-columns:1.05fr .95fr;gap:0;border-bottom:3px solid var(--ink)}
+@media (max-width:900px){.poster{grid-template-columns:1fr}}
+.poster__l{background:var(--wine);color:var(--bone);padding:clamp(26px,4.4vw,68px);
+  display:flex;flex-direction:column;justify-content:space-between;gap:clamp(24px,4vh,52px)}
+.poster__l h2{font-size:clamp(29px,4.4vw,66px);text-wrap:balance}
+.poster__l h2 em{font-family:"Playfair Display",serif;font-style:italic;font-weight:400;
+  font-size:.62em;letter-spacing:0;color:var(--gold);text-transform:none}
+.poster__l p{max-width:40ch;color:rgba(241,236,227,.82)}
+.poster__meta{display:flex;flex-wrap:wrap;gap:8px 28px;border-top:1px solid rgba(241,236,227,.32);padding-top:16px}
+.poster__r{position:relative;min-height:clamp(320px,60vh,660px);overflow:hidden}
+.poster__r img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
+.poster__r figcaption{position:absolute;left:0;bottom:0;z-index:2;background:var(--bone);
+  border-top:1px solid var(--ink);border-right:1px solid var(--ink);padding:9px 16px}
+
+/* ── section shell ───────────────────────── */
+.act{padding-block:clamp(48px,9vh,110px)}
+.act--wine{background:var(--wine);color:var(--bone)}
+.act--wine .lead{color:rgba(241,236,227,.82)}
+.ahead{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:12px 26px;
+  border-bottom:3px solid currentColor;padding-bottom:12px;margin-bottom:clamp(26px,5vh,56px)}
+.ahead h3{font-family:var(--display);font-size:clamp(26px,3.8vw,54px);line-height:.98;letter-spacing:.01em}
+.lead{max-width:52ch;color:var(--muted)}
+
+/* ── programme (services) ────────────────── */
+.prog{border-top:1px solid currentColor}
+.prg{display:grid;grid-template-columns:auto 1fr auto;gap:clamp(12px,2vw,28px);align-items:baseline;
+  border-bottom:1px solid currentColor;padding-block:clamp(16px,2.4vh,26px);cursor:pointer}
+.prg__act{font-family:var(--display);font-size:clamp(19px,2.1vw,30px);color:var(--gold);min-width:2.4em}
+.prg__name{font-family:var(--display);font-size:clamp(18px,2.1vw,31px);letter-spacing:.01em;line-height:1.06}
+.prg__dots{flex:1}
+.prg__who{font-size:14px;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;opacity:.72}
+.prg__body{grid-column:2/3;padding-top:8px;max-width:60ch;opacity:.82}
+@media (max-width:700px){
+  .prg{grid-template-columns:auto 1fr}
+  .prg__who{grid-column:2/3;justify-self:start}
+  .prg__body{grid-column:1/-1}
+}
+
+/* ── афиша (works) ───────────────────────── */
+.afisha{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(16px,2.4vw,34px)}
+@media (max-width:940px){.afisha{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:600px){.afisha{grid-template-columns:1fr}}
+.af{background:var(--bone);border:1px solid var(--ink);color:var(--ink);overflow:hidden;
+  transition:transform .4s cubic-bezier(.2,.7,.2,1),box-shadow .4s}
+.af:hover{transform:translateY(-5px);box-shadow:8px 8px 0 var(--wine)}
+.af__img{aspect-ratio:3/4;overflow:hidden;border-bottom:1px solid var(--ink)}
+.af__img img{width:100%;height:100%;object-fit:cover;transition:transform 1.1s cubic-bezier(.2,.7,.2,1)}
+.af:hover .af__img img{transform:scale(1.05)}
+.af__b{padding:16px 18px 20px}
+.af__no{color:var(--wine)}
+.af__name{font-family:var(--display);font-size:clamp(19px,1.8vw,26px);line-height:1.06;padding:8px 0 6px}
+.af__descr{font-size:15px;color:var(--muted)}
+.af__where{font-family:"Playfair Display",serif;font-style:italic;font-size:15px;color:var(--wine);padding-top:8px}
+
+/* ── реквизит (vases) ────────────────────── */
+.props{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(16px,2.4vw,34px)}
+@media (max-width:900px){.props{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:540px){.props{grid-template-columns:1fr}}
+.pr__img{aspect-ratio:3/4;overflow:hidden;border:1px solid rgba(241,236,227,.28)}
+.pr__img img{width:100%;height:100%;object-fit:cover;transition:transform 1s cubic-bezier(.2,.7,.2,1)}
+.pr:hover .pr__img img{transform:scale(1.045)}
+.pr__row{display:flex;justify-content:space-between;gap:14px;align-items:baseline;padding-top:14px}
+.pr__name{font-family:var(--display);font-size:21px;letter-spacing:.02em}
+.pr__price{color:var(--gold);font-size:15px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.pr__descr{font-size:14.5px;color:rgba(241,236,227,.7);padding-top:5px;max-width:34ch}
+
+/* ── касса (contacts) ────────────────────── */
+.box{display:grid;grid-template-columns:1fr 1fr;gap:clamp(22px,4vw,60px);align-items:start}
+@media (max-width:900px){.box{grid-template-columns:1fr}}
+.box__big{font-family:var(--display);font-size:clamp(25px,3.4vw,45px);line-height:1.16;letter-spacing:.01em}
+.box__big a{transition:color .25s}
+.box__big a:hover{color:var(--wine)}
+.box__note{font-size:12px;line-height:1.5;color:var(--muted);max-width:44ch;padding-top:18px}
+.tk{border:2px solid var(--ink);padding:clamp(20px,2.6vw,34px);background:var(--bone)}
+.tk__hd{display:flex;justify-content:space-between;gap:14px;border-bottom:1px dashed var(--ink);
+  padding-bottom:12px;margin-bottom:18px}
+.tf{display:block;margin-bottom:14px}
+.tf span{display:block;padding-bottom:5px}
+.tf input{width:100%;border:1px solid var(--line);background:#fff;font:inherit;color:var(--ink);
+  padding:13px 14px;transition:border-color .25s}
+.tf input:focus{outline:0;border-color:var(--wine)}
+.tk__go{width:100%;margin-top:6px;background:var(--wine);color:var(--bone);border:0;cursor:pointer;
+  font-family:var(--display);font-size:17px;letter-spacing:.1em;padding:16px;transition:background .3s}
+.tk__go:hover{background:var(--ink)}
+
+footer{border-top:3px solid var(--ink);padding-block:22px 40px}
+footer .wrap{display:flex;flex-wrap:wrap;gap:10px 34px;justify-content:space-between}
+
+@media (prefers-reduced-motion:reduce){
+  *{transition:none!important;animation:none!important}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+
+<!-- ── ПРОГРАММКА · ШАПКА ───────────────── -->
+<header class="bill" id="top">
+  <div class="wrap">
+    <div class="bill__top cap"><span>Москва</span><span>Бюро сценографии цветка</span><span>Сезон 2026</span></div>
+    <div class="rule2"></div>
+    <div class="bill__name">
+      <h1 class="bebas">Element by Моск</h1>
+      <div class="sub">студия флористики и сет-дизайна</div>
+    </div>
+    <div class="rule2"></div>
+    <nav class="bill__strip cap">
+      <a href="#programme">Программа</a>
+      <a href="#afisha">Афиша</a>
+      <a href="#props">Реквизит</a>
+      <a href="#box">Касса</a>
+    </nav>
+  </div>
+</header>
+
+<div class="marq" aria-hidden="true">
+  <div class="marq__track">
+    <span>Декор мероприятий</span><span>Сет-дизайн</span><span>Консьерж-сервис</span><span>Оформление интерьера</span>
+    <span>Декор мероприятий</span><span>Сет-дизайн</span><span>Консьерж-сервис</span><span>Оформление интерьера</span>
+  </div>
+</div>
+
+<main>
+
+<!-- ── АФИША-ПОСТЕР ─────────────────────── -->
+<section class="poster">
+  <div class="poster__l">
+    <div>
+      <div class="cap" style="opacity:.7">Сегодня вечером</div>
+      <h2 class="bebas" style="padding-top:14px">Декор становится<br><em>продуманной сценой</em></h2>
+    </div>
+    <div>
+      <p>Мы работаем со столом как со сценой: у каждого цветка есть выход, роль и свет.
+      Композиция строится не вокруг одного объекта, а на их взаимодействии.</p>
+      <div class="poster__meta cap"><span>4 действия</span><span>5 премьер</span><span>6 предметов реквизита</span></div>
+    </div>
+  </div>
+  <figure class="poster__r">
+    <img src="../source/media/tild6530-643_IMG_0796_1.jpg" alt="Сервированный стол с белыми композициями в сводчатом зале">
+    <figcaption class="cap">Chef’s Table · арт-обед</figcaption>
+  </figure>
+</section>
+
+<!-- ── ПРОГРАММА ────────────────────────── -->
+<section class="act" id="programme">
+  <div class="wrap">
+    <div class="ahead">
+      <h3>Программа</h3>
+      <p class="lead">Четыре действия — от одной композиции в интерьере до полного
+      сопровождения события.</p>
+    </div>
+
+    <div class="prog">
+      <article class="prg">
+        <div class="prg__act bebas">I</div>
+        <div class="prg__name">Оформление интерьера</div>
+        <div class="prg__who">Частным клиентам</div>
+        <p class="prg__body">Индивидуальные декоративные решения, подчеркивающие атмосферу праздника
+        и стиль вашего дома. От элегантных цветочных акцентов до комплексного оформления пространства.</p>
+      </article>
+      <article class="prg">
+        <div class="prg__act bebas">II</div>
+        <div class="prg__name">Сет-дизайн дома</div>
+        <div class="prg__who">Частным клиентам</div>
+        <p class="prg__body">Создаем праздничное оформление для любого повода, наполняя пространство
+        атмосферой торжества. Индивидуальный подход и работа с концепцией вашего праздника.</p>
+      </article>
+      <article class="prg">
+        <div class="prg__act bebas">III</div>
+        <div class="prg__name">Декор мероприятий</div>
+        <div class="prg__who">Для бизнеса</div>
+        <p class="prg__body">Индивидуально разработанные флористические оформления для ваших событий.
+        Поддержка 360 — от разработки концепции до реализации.</p>
+      </article>
+      <article class="prg">
+        <div class="prg__act bebas">IV</div>
+        <div class="prg__name">Консьерж-сервис</div>
+        <div class="prg__who">Для бизнеса</div>
+        <p class="prg__body">Концептуальные цветочные композиции для вашего пространства. Гарантия
+        свежих цветов и нужной атмосферы — по сезону и визуальному ДНК вашего бренда.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ── АФИША ────────────────────────────── -->
+<section class="act" id="afisha" style="border-top:3px solid var(--ink)">
+  <div class="wrap">
+    <div class="ahead">
+      <h3>Афиша</h3>
+      <p class="lead">Пять премьер сезона — события, где флористика была частью замысла.</p>
+    </div>
+
+    <div class="afisha">
+      <a class="af" href="#">
+        <div class="af__img"><img src="../source/media/tild6530-643_IMG_0796_1.jpg" alt="Стол с белыми композициями"></div>
+        <div class="af__b">
+          <div class="cap af__no">Премьера I</div>
+          <h4 class="af__name">Chef’s Table</h4>
+          <p class="af__descr">Более 40 белоснежных цветов, изготовленных вручную, — арт-обед к юбилею Есенина.</p>
+          <div class="af__where">ресторан Chef’s Table · клуб МОСК</div>
+        </div>
+      </a>
+      <a class="af" href="#">
+        <div class="af__img"><img src="../source/media/tild6361-623_IMG_8444_1.jpg" alt="Антуриумы на белом рояле"></div>
+        <div class="af__b">
+          <div class="cap af__no">Премьера II</div>
+          <h4 class="af__name">Marco Polo</h4>
+          <p class="af__descr">Красные антуриумы и нежные розы — мужское и женское начало в одном кадре.</p>
+          <div class="af__where">отель Marco Polo · Moss Hospitality</div>
+        </div>
+      </a>
+      <a class="af" href="#">
+        <div class="af__img"><img src="../source/media/tild6338-376_capture_23840.jpg" alt="Домашняя сервировка"></div>
+        <div class="af__b">
+          <div class="cap af__no">Премьера III</div>
+          <h4 class="af__name">Домашний сет</h4>
+          <p class="af__descr">Каллы и тюльпаны с посудой Bosco Casa — продолжение интерьера загородного дома.</p>
+          <div class="af__where">частный дом · для Снежаны Георгиевой</div>
+        </div>
+      </a>
+      <a class="af" href="#">
+        <div class="af__img"><img src="../source/media/tild6663-313_2025-05-22_203919.jpg" alt="Флористика в бильярдном клубе"></div>
+        <div class="af__b">
+          <div class="cap af__no">Премьера IV</div>
+          <h4 class="af__name">Billie</h4>
+          <p class="af__descr">Старый Голливуд, московская ирония и новая социальная жизнь за бильярдным столом.</p>
+          <div class="af__where">клуб Billie · клуб МОСК</div>
+        </div>
+      </a>
+      <a class="af" href="#">
+        <div class="af__img"><img src="../source/media/tild3738-633_2025-05-22_204218.jpg" alt="Расписанные антуриумы и дельфиниумы"></div>
+        <div class="af__b">
+          <div class="cap af__no">Премьера V</div>
+          <h4 class="af__name">Танец ХХ века</h4>
+          <p class="af__descr">Сет-дизайн, вдохновлённый работами Малевича и его геометрией.</p>
+          <div class="af__where">Еврейский музей · Ксения Чилингарова</div>
+        </div>
+      </a>
+      <a class="af" href="#box">
+        <div class="af__img"><img src="../source/media/tild3264-636_IMG_5062_1.jpg" alt="Сервировочная стойка с нарциссами"></div>
+        <div class="af__b">
+          <div class="cap af__no">Скоро</div>
+          <h4 class="af__name">Ваш вечер</h4>
+          <p class="af__descr">Расскажите о событии — соберём состав, свет и композицию.</p>
+          <div class="af__where">заявка в кассе →</div>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ── РЕКВИЗИТ ─────────────────────────── -->
+<section class="act act--wine" id="props">
+  <div class="wrap">
+    <div class="ahead">
+      <h3>Реквизит</h3>
+      <p class="lead">Шесть керамических форм ручной работы. Каждая — 28 000 ₽.</p>
+    </div>
+
+    <div class="props">
+      <article class="pr">
+        <div class="pr__img"><img src="../source/media/stor3837-666_90888100.jpg" alt="Stone Bowl"></div>
+        <div class="pr__row"><h4 class="pr__name">Stone Bowl</h4><span class="pr__price">28 000 ₽</span></div>
+        <p class="pr__descr">Округлая форма с живой каменной фактурой.</p>
+      </article>
+      <article class="pr">
+        <div class="pr__img"><img src="../source/media/stor3162-653_23435811.jpg" alt="Linen Trace"></div>
+        <div class="pr__row"><h4 class="pr__name">Linen Trace</h4><span class="pr__price">28 000 ₽</span></div>
+        <p class="pr__descr">Вертикальные насечки, архитектурный ритм.</p>
+      </article>
+      <article class="pr">
+        <div class="pr__img"><img src="../source/media/stor3538-333_67787084.jpg" alt="Clay Ember"></div>
+        <div class="pr__row"><h4 class="pr__name">Clay Ember</h4><span class="pr__price">28 000 ₽</span></div>
+        <p class="pr__descr">Теплая терракота с естественным блеском.</p>
+      </article>
+      <article class="pr">
+        <div class="pr__img"><img src="../source/media/stor3234-373_85274525.jpg" alt="Shadow Clay"></div>
+        <div class="pr__row"><h4 class="pr__name">Shadow Clay</h4><span class="pr__price">28 000 ₽</span></div>
+        <p class="pr__descr">Глубокий коричнево-угольный оттенок.</p>
+      </article>
+      <article class="pr">
+        <div class="pr__img"><img src="../source/media/stor3264-656_95950811.jpg" alt="Frost Vessel"></div>
+        <div class="pr__row"><h4 class="pr__name">Frost Vessel</h4><span class="pr__price">28 000 ₽</span></div>
+        <p class="pr__descr">Поверхность, напоминающая иней.</p>
+      </article>
+      <article class="pr">
+        <div class="pr__img"><img src="../source/media/stor6366-646_96633821.jpg" alt="Sand Form"></div>
+        <div class="pr__row"><h4 class="pr__name">Sand Form</h4><span class="pr__price">28 000 ₽</span></div>
+        <p class="pr__descr">Охристый оттенок и округлые линии.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ── КАССА ────────────────────────────── -->
+<section class="act" id="box">
+  <div class="wrap">
+    <div class="ahead">
+      <h3>Касса</h3>
+      <p class="lead">Расскажите о событии — предложим состав и смету.</p>
+    </div>
+
+    <div class="box">
+      <div>
+        <div class="box__big">
+          <p><a href="https://wa.me/79167468668">+7 916 746 86 68</a></p>
+          <p><a href="https://www.instagram.com/elementbymosk">elementbymosk<sup>*</sup></a></p>
+        </div>
+        <p class="box__note">*Instagram (продукт компании Meta, признанной экстремистской организацией
+        в России и запрещённой на территории РФ)</p>
+      </div>
+
+      <form class="tk" onsubmit="return false">
+        <div class="tk__hd cap"><span>Заявка</span><span>Element by Моск</span></div>
+        <label class="tf"><span class="cap">Имя</span><input type="text" placeholder="Как к вам обращаться"></label>
+        <label class="tf"><span class="cap">Телефон</span><input type="tel" placeholder="+7 (000) 000-00-00"></label>
+        <label class="tf"><span class="cap">Событие</span><input type="text" placeholder="Повод, дата, площадка"></label>
+        <button class="tk__go" type="submit">Забронировать вечер</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap cap">
+    <span>Element by Моск</span>
+    <span>Студия флористики и сет-дизайна</span>
+    <span>Москва · 2026</span>
+  </div>
+</footer>
+</body>
+</html>

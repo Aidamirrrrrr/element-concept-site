@@ -1,0 +1,20 @@
+{
+  "name": "element-concept-site",
+  "description": "Сайт студии флористики и сет-дизайна ELEMENT by МОСК",
+  "module": "server.ts",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "start": "bun run server.ts",
+    "dev": "bun --watch server.ts",
+    "build:assets": "python3 tools/build-assets.py",
+    "build:fonts": "python3 tools/fetch-fonts.py",
+    "build": "bun run build:fonts && bun run build:assets"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  }
+}

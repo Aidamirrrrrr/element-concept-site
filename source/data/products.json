@@ -1,0 +1,84 @@
+{
+  "source": "store.tildaapi.com/api/getproductslist — storepartuid 604605359462, projectid 13237575",
+  "fetched": "2026-08-07",
+  "block": "rec1412049261",
+  "type": "T776",
+  "currency": "RUB",
+  "note": "Артикулы (sku) в Тильде не заполнены — на сайте поле не выводим.",
+  "products": [
+    {
+      "uid": "528790470092",
+      "slug": "stone-bowl",
+      "title": "Stone Bowl",
+      "sku": "",
+      "price": 28000,
+      "descr": "Округлая форма с живой каменной фактурой. Воплощение устойчивости и спокойствия в пространстве.",
+      "gallery": [
+        "https://static.tildacdn.com/stor3837-6665-4361-b533-353730326631/90888100.jpg"
+      ]
+    },
+    {
+      "uid": "615114621842",
+      "slug": "linen-trace",
+      "title": "Linen Trace",
+      "sku": "",
+      "price": 28000,
+      "descr": "Светлая ваза с вертикальными насечками. Игра света и текстуры, простая форма с архитектурным ритмом.",
+      "gallery": [
+        "https://static.tildacdn.com/stor3162-6537-4535-b537-656533383633/23435811.jpg",
+        "https://static.tildacdn.com/stor3962-6164-4833-a163-666662383233/93517286.jpg"
+      ]
+    },
+    {
+      "uid": "932909410292",
+      "slug": "clay-ember",
+      "title": "Clay Ember",
+      "sku": "",
+      "price": 28000,
+      "descr": "Теплая терракота с естественным блеском. Простая форма, созданная руками и временем.",
+      "gallery": [
+        "https://static.tildacdn.com/stor3538-3338-4862-b666-323164663533/67787084.jpg",
+        "https://static.tildacdn.com/stor6162-3038-4637-b335-396463343731/88155630.jpg"
+      ]
+    },
+    {
+      "uid": "636191131182",
+      "slug": "shadow-clay",
+      "title": "Shadow Clay",
+      "sku": "",
+      "price": 28000,
+      "descr": "Матовая ваза глубокого коричнево-угольного оттенка. Лаконичный артефакт с характером.",
+      "gallery": [
+        "https://static.tildacdn.com/stor3234-3738-4064-b337-333935616139/85274525.jpg",
+        "https://static.tildacdn.com/stor6564-3434-4162-b266-383238613637/36178256.jpg"
+      ]
+    },
+    {
+      "uid": "962337052902",
+      "slug": "frost-vessel",
+      "title": "Frost Vessel",
+      "sku": "",
+      "price": 28000,
+      "descr": "Серовато-белая поверхность, напоминающая иней. Грубая структура сочетается с ощущением легкости.",
+      "gallery": [
+        "https://static.tildacdn.com/stor3264-6564-4730-b061-306264613064/95950811.jpg",
+        "https://static.tildacdn.com/stor3332-6261-4339-b735-636132646262/81530891.jpg",
+        "https://static.tildacdn.com/stor3738-3662-4137-b035-623636383236/65334664.jpg"
+      ]
+    },
+    {
+      "uid": "164839650022",
+      "slug": "sand-form",
+      "title": "Sand Form",
+      "sku": "",
+      "price": 28000,
+      "descr": "Мягкий охристый оттенок и округлые линии. Универсальный акцент — баланс тепла и минимализма.",
+      "gallery": [
+        "https://static.tildacdn.com/stor6366-6464-4431-b032-623534306265/96633821.jpg",
+        "https://static.tildacdn.com/stor6535-6365-4965-b361-376137373036/92366715.jpg",
+        "https://static.tildacdn.com/stor6631-3037-4634-a232-336130303666/56379761.jpg",
+        "https://static.tildacdn.com/stor3137-3638-4561-b737-303836623363/59092823.jpg"
+      ]
+    }
+  ]
+}

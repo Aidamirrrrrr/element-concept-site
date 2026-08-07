@@ -1,0 +1,473 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ELEMENT by МОСК — Гербарий</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Prata&family=JetBrains+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --board:#DBDAD0;
+  --sheet:#EAE9E1;
+  --ink:#191C18;
+  --muted:#6B6E64;
+  --line:#C2C1B5;
+  --archive:#2E4A6B;
+  --tag:#A8792C;
+  --gutter:clamp(18px,3.6vw,56px);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--board);color:var(--ink);
+  font-family:"IBM Plex Sans",system-ui,sans-serif;font-weight:300;font-size:16.5px;line-height:1.66;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:1.5px solid var(--archive);outline-offset:3px}
+
+.spec{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.serif{font-family:"Prata",Georgia,serif;font-weight:400}
+.wrap{max-width:1380px;margin-inline:auto;padding-inline:var(--gutter)}
+
+/* herbarium sheet: paper + crosshair grid */
+.sheet{position:relative;background:var(--sheet);border:1px solid var(--line);
+  margin-inline:auto;margin-block:clamp(14px,2.4vw,30px);max-width:1380px;
+  background-image:
+    linear-gradient(var(--line) 1px,transparent 1px),
+    linear-gradient(90deg,var(--line) 1px,transparent 1px);
+  background-size:64px 64px;background-position:-1px -1px;
+}
+.sheet::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(120% 90% at 50% 0%,rgba(234,233,225,.96) 40%,rgba(234,233,225,.72) 100%)}
+.sheet > *{position:relative;z-index:1}
+.sheet__pad{padding:clamp(26px,4.4vw,64px)}
+.sheet__no{position:absolute;top:0;right:0;z-index:2;border-left:1px solid var(--line);border-bottom:1px solid var(--line);
+  padding:9px 14px;background:var(--sheet)}
+
+/* ── head ────────────────────────────────── */
+.masthead{position:sticky;top:0;z-index:60;background:color-mix(in srgb,var(--board) 92%,transparent);
+  backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.masthead__in{display:flex;align-items:center;justify-content:space-between;gap:18px;height:58px}
+.masthead__mark{font-family:"Prata",serif;font-size:18px;letter-spacing:.01em}
+.masthead__nav{display:flex;gap:clamp(12px,2vw,28px)}
+.masthead__nav a{transition:color .25s}
+.masthead__nav a:hover{color:var(--archive)}
+@media (max-width:880px){.masthead__nav{display:none}}
+
+/* ── cover sheet ─────────────────────────── */
+.cover{display:grid;grid-template-columns:1.15fr .85fr;gap:clamp(24px,4vw,64px);align-items:center}
+@media (max-width:900px){.cover{grid-template-columns:1fr}}
+.cover__stamp{display:inline-flex;align-items:center;gap:10px;border:1px solid var(--archive);color:var(--archive);
+  padding:6px 12px;transform:rotate(-1.4deg);margin-bottom:26px}
+.cover__stamp span{font-family:"JetBrains Mono",monospace;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase}
+.cover h1{font-family:"Prata",serif;font-weight:400;font-size:clamp(34px,5.4vw,80px);
+  line-height:1.04;letter-spacing:-.015em;text-wrap:balance}
+.cover h1 i{font-style:italic;color:var(--tag)}
+.cover p{max-width:44ch;color:var(--muted);padding-top:20px}
+.cover__meta{display:flex;flex-wrap:wrap;gap:8px 30px;padding-top:26px;border-top:1px solid var(--line);margin-top:26px}
+.cover__plate{position:relative;padding:14px;background:#fff;border:1px solid var(--line);
+  transform:rotate(1.6deg);box-shadow:0 14px 34px rgba(25,28,24,.09)}
+.cover__plate img{width:100%;aspect-ratio:3/4;object-fit:cover}
+.cover__plate figcaption{padding-top:12px;display:flex;justify-content:space-between;gap:14px}
+.pin{position:absolute;top:-7px;left:50%;translate:-50% 0;width:14px;height:14px;border-radius:50%;
+  background:var(--archive);box-shadow:0 3px 7px rgba(25,28,24,.35)}
+
+/* ── specimen index (interactive) ────────── */
+.idx{display:grid;grid-template-columns:1fr 1.15fr;gap:clamp(24px,4vw,64px);align-items:start}
+@media (max-width:900px){.idx{grid-template-columns:1fr}}
+.idx__list{display:flex;flex-direction:column}
+.idx__btn{display:grid;grid-template-columns:52px 1fr auto;gap:14px;align-items:baseline;
+  background:none;border:0;border-top:1px solid var(--line);cursor:pointer;text-align:left;
+  font:inherit;color:var(--ink);padding:13px 4px;transition:background .25s,padding-left .3s}
+.idx__list .idx__btn:last-child{border-bottom:1px solid var(--line)}
+.idx__btn:hover,.idx__btn[aria-current="true"]{background:rgba(46,74,107,.06);padding-left:12px}
+.idx__btn[aria-current="true"] .idx__name{color:var(--archive)}
+.idx__name{font-family:"Prata",serif;font-size:clamp(19px,2vw,27px);line-height:1.2;transition:color .25s}
+.idx__lat{font-style:italic;color:var(--muted);font-size:14px}
+.idx__view{position:relative}
+.idx__frame{position:relative;background:#fff;border:1px solid var(--line);padding:14px;
+  box-shadow:0 16px 40px rgba(25,28,24,.1)}
+.idx__frame img{width:100%;aspect-ratio:4/5;object-fit:cover;transition:opacity .45s ease}
+.idx__cap{display:flex;justify-content:space-between;gap:14px;padding-top:12px}
+.idx__note{padding-top:16px;color:var(--muted);font-size:14.5px;max-width:44ch}
+
+/* ── generic sheet head ──────────────────── */
+.shd{display:flex;flex-wrap:wrap;gap:10px 28px;align-items:baseline;justify-content:space-between;
+  border-bottom:1px solid var(--line);padding-bottom:16px;margin-bottom:clamp(24px,4vh,48px)}
+.shd h2{font-family:"Prata",serif;font-weight:400;font-size:clamp(24px,3.4vw,46px);line-height:1.08;letter-spacing:-.012em}
+
+/* ── methods (services) ──────────────────── */
+.mth{display:grid;grid-template-columns:repeat(2,1fr);gap:clamp(18px,3vw,44px)}
+@media (max-width:820px){.mth{grid-template-columns:1fr}}
+.mth__card{border:1px solid var(--line);background:#fff;padding:clamp(18px,2.2vw,30px);
+  transition:transform .4s cubic-bezier(.2,.7,.2,1),box-shadow .4s}
+.mth__card:hover{transform:translateY(-3px);box-shadow:0 16px 36px rgba(25,28,24,.09)}
+.mth__img{aspect-ratio:16/11;overflow:hidden;margin-bottom:18px}
+.mth__img img{width:100%;height:100%;object-fit:cover}
+.mth__name{font-family:"Prata",serif;font-size:clamp(19px,1.9vw,25px);line-height:1.2;padding:10px 0 8px}
+.mth__descr{color:var(--muted);font-size:15.5px}
+
+/* ── works: pinned specimen cards ────────── */
+.works{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(22px,3.4vw,52px)}
+@media (max-width:900px){.works{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:600px){.works{grid-template-columns:1fr}}
+.wk{position:relative;background:#fff;border:1px solid var(--line);padding:12px 12px 16px;
+  transition:transform .45s cubic-bezier(.2,.7,.2,1),box-shadow .45s}
+.wk:nth-child(3n+1){transform:rotate(-1.1deg)}
+.wk:nth-child(3n+2){transform:rotate(.7deg);margin-top:clamp(10px,2vw,28px)}
+.wk:nth-child(3n+3){transform:rotate(-.5deg)}
+.wk:hover{transform:rotate(0deg) translateY(-4px);box-shadow:0 18px 40px rgba(25,28,24,.13);z-index:2}
+.wk img{width:100%;aspect-ratio:4/5;object-fit:cover}
+.wk__name{font-family:"Prata",serif;font-size:20px;line-height:1.2;padding:14px 2px 4px}
+.wk__descr{color:var(--muted);font-size:14.5px;padding-inline:2px}
+.wk__tag{display:flex;justify-content:space-between;gap:12px;padding:12px 2px 0;margin-top:12px;border-top:1px solid var(--line)}
+
+/* ── vessels (vases) ─────────────────────── */
+.vs{border-top:1px solid var(--line)}
+.vs__row{display:grid;grid-template-columns:76px 1.1fr 2fr auto;gap:clamp(12px,2vw,32px);align-items:center;
+  border-bottom:1px solid var(--line);padding-block:14px;transition:background .25s}
+.vs__row:hover{background:rgba(46,74,107,.05)}
+.vs__row img{width:76px;aspect-ratio:3/4;object-fit:cover;border:1px solid var(--line)}
+.vs__name{font-family:"Prata",serif;font-size:20px;line-height:1.2}
+.vs__descr{color:var(--muted);font-size:14.5px}
+.vs__price{font-family:"JetBrains Mono",monospace;font-size:14px;font-variant-numeric:tabular-nums;white-space:nowrap;color:var(--tag)}
+@media (max-width:760px){
+  .vs__row{grid-template-columns:60px 1fr auto;row-gap:6px}
+  .vs__row img{width:60px}
+  .vs__descr{grid-column:2/-1}
+}
+
+/* ── label card (contacts) ───────────────── */
+.lbl{display:grid;grid-template-columns:1fr 1fr;gap:clamp(22px,4vw,56px)}
+@media (max-width:900px){.lbl{grid-template-columns:1fr}}
+.lbl__card{background:#fff;border:1px solid var(--line);padding:clamp(20px,2.6vw,34px);transform:rotate(-.6deg)}
+.lbl__big{font-family:"Prata",serif;font-size:clamp(21px,2.4vw,32px);line-height:1.4}
+.lbl__big a{border-bottom:1px solid var(--line);transition:border-color .25s,color .25s}
+.lbl__big a:hover{color:var(--archive);border-color:var(--archive)}
+.lbl__note{font-size:12px;line-height:1.5;color:var(--muted);max-width:42ch;padding-top:18px}
+.fl{display:block;border-bottom:1px solid var(--line);padding-block:10px 6px;margin-bottom:12px;transition:border-color .25s}
+.fl:focus-within{border-color:var(--archive)}
+.fl input{width:100%;border:0;background:none;font:inherit;color:var(--ink);padding:5px 0}
+.fl input:focus{outline:0}
+.fl input::placeholder{color:#9A9C91}
+.go{margin-top:20px;width:100%;background:var(--ink);color:var(--sheet);border:0;cursor:pointer;
+  font-family:"JetBrains Mono",monospace;font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;
+  padding:16px;transition:background .3s}
+.go:hover{background:var(--archive)}
+
+footer{padding:26px var(--gutter) 46px}
+footer .wrap{display:flex;flex-wrap:wrap;gap:10px 34px;justify-content:space-between;padding-inline:0}
+
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="wrap masthead__in">
+    <a class="masthead__mark" href="#top">Element by Моск</a>
+    <nav class="masthead__nav spec">
+      <a href="#elements">Элементы</a>
+      <a href="#methods">Методы</a>
+      <a href="#works">Работы</a>
+      <a href="#vessels">Сосуды</a>
+      <a href="#contact">Контакты</a>
+    </nav>
+    <span class="spec">Лист 01–05</span>
+  </div>
+</header>
+
+<main id="top">
+
+<!-- ── ЛИСТ I · ОБЛОЖКА ─────────────────── -->
+<section class="sheet">
+  <div class="sheet__no spec">Лист&nbsp;I</div>
+  <div class="sheet__pad cover">
+    <div>
+      <div class="cover__stamp"><span>Студия флористики и сет-дизайна</span></div>
+      <h1>Красота — <i>в каждом</i><br>отдельном цветке</h1>
+      <p>Мы собираем событие как гербарный лист: каждый элемент найден, назван
+      и поставлен на своё место. Ничего случайного.</p>
+      <div class="cover__meta spec">
+        <span>Москва</span><span>Сбор — круглый год</span><span>Работ в описи — 05</span>
+      </div>
+    </div>
+    <figure class="cover__plate">
+      <span class="pin" aria-hidden="true"></span>
+      <img src="../source/media/tild6361-623_IMG_8444_1.jpg" alt="Красные антуриумы и лепестки роз на белом рояле">
+      <figcaption class="spec"><span>Обр. 01 · Anthurium</span><span>Marco Polo</span></figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ── ЛИСТ II · ЭЛЕМЕНТЫ ───────────────── -->
+<section class="sheet" id="elements">
+  <div class="sheet__no spec">Лист&nbsp;II</div>
+  <div class="sheet__pad">
+    <div class="shd">
+      <h2>Элементы</h2>
+      <span class="spec">Наведите на название — покажем образец</span>
+    </div>
+
+    <div class="idx">
+      <div class="idx__list" role="list">
+        <button class="idx__btn" aria-current="true"
+                data-img="../source/media/tild6361-623_IMG_8444_1.jpg"
+                data-cap="Обр. 01 · Marco Polo"
+                data-note="Ярко-красные антуриумы — аллюзия на мужское начало. Работали в паре с нежными розами как символом феминности.">
+          <span class="spec">01</span><span class="idx__name">Антуриум</span><span class="idx__lat">Anthurium</span>
+        </button>
+        <button class="idx__btn"
+                data-img="../source/media/tild3738-633_2025-05-22_204218.jpg"
+                data-cap="Обр. 02 · Еврейский музей"
+                data-note="Синие дельфиниумы и расписанные вручную антуриумы — сет-дизайн по геометрии Малевича.">
+          <span class="spec">02</span><span class="idx__name">Дельфиниум</span><span class="idx__lat">Delphinium</span>
+        </button>
+        <button class="idx__btn"
+                data-img="../source/media/tild6336-333_photo_2025-06-18_124.jpeg"
+                data-cap="Обр. 03 · Консьерж-сервис"
+                data-note="Пионы в каменной вазе — постоянное оформление пространства бренда, обновляется по сезону.">
+          <span class="spec">03</span><span class="idx__name">Пион</span><span class="idx__lat">Paeonia</span>
+        </button>
+        <button class="idx__btn"
+                data-img="../source/media/tild3264-636_IMG_5062_1.jpg"
+                data-cap="Обр. 04 · Приём"
+                data-note="Нарциссы и гвоздики на сервировочной стойке — вечерний свет как часть композиции.">
+          <span class="spec">04</span><span class="idx__name">Нарцисс</span><span class="idx__lat">Narcissus</span>
+        </button>
+        <button class="idx__btn"
+                data-img="../source/media/tild6530-643_IMG_0796_1.jpg"
+                data-cap="Обр. 05 · Chef’s Table"
+                data-note="Более 40 белоснежных цветов, изготовленных вручную, — арт-обед к юбилею Есенина.">
+          <span class="spec">05</span><span class="idx__name">Сухоцвет</span><span class="idx__lat">Siccus</span>
+        </button>
+        <button class="idx__btn"
+                data-img="../source/media/tild6338-376_capture_23840.jpg"
+                data-cap="Обр. 06 · Частный дом"
+                data-note="Каллы и тюльпаны в сочетании с посудой Bosco Casa — продолжение интерьера загородного дома.">
+          <span class="spec">06</span><span class="idx__name">Калла</span><span class="idx__lat">Zantedeschia</span>
+        </button>
+      </div>
+
+      <div class="idx__view">
+        <figure class="idx__frame">
+          <span class="pin" aria-hidden="true"></span>
+          <img id="idxImg" src="../source/media/tild6361-623_IMG_8444_1.jpg" alt="Образец композиции">
+          <figcaption class="idx__cap spec"><span id="idxCap">Обр. 01 · Marco Polo</span><span>Element by Моск</span></figcaption>
+        </figure>
+        <p class="idx__note" id="idxNote">Ярко-красные антуриумы — аллюзия на мужское начало.
+        Работали в паре с нежными розами как символом феминности.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ЛИСТ III · МЕТОДЫ ────────────────── -->
+<section class="sheet" id="methods">
+  <div class="sheet__no spec">Лист&nbsp;III</div>
+  <div class="sheet__pad">
+    <div class="shd">
+      <h2>Методы</h2>
+      <span class="spec">Частным клиентам · Для бизнеса</span>
+    </div>
+
+    <div class="mth">
+      <article class="mth__card">
+        <div class="mth__img"><img src="../source/media/tild3933-313_DSC08638.jpg" alt="Флористическое оформление интерьера"></div>
+        <div class="spec">Метод 01 · частным клиентам</div>
+        <h3 class="mth__name">Флористическое оформление интерьера</h3>
+        <p class="mth__descr">Индивидуальные решения, подчеркивающие атмосферу праздника и стиль
+        вашего дома — от акцентов до комплексного оформления пространства.</p>
+      </article>
+      <article class="mth__card">
+        <div class="mth__img"><img src="../source/media/tild3862-393_IMG_9780.JPG" alt="Сет-дизайн домашнего мероприятия"></div>
+        <div class="spec">Метод 02 · частным клиентам</div>
+        <h3 class="mth__name">Сет-дизайн для домашних мероприятий</h3>
+        <p class="mth__descr">Праздничное оформление для любого повода. Индивидуальный подход
+        и работа с концепцией и форматом вашего праздника.</p>
+      </article>
+      <article class="mth__card">
+        <div class="mth__img"><img src="../source/media/tild6161-363_2025-05-22_203907.jpg" alt="Декор мероприятий"></div>
+        <div class="spec">Метод 03 · для бизнеса</div>
+        <h3 class="mth__name">Декор мероприятий</h3>
+        <p class="mth__descr">Индивидуально разработанные оформления для ваших событий.
+        Поддержка 360 — от разработки концепции до реализации.</p>
+      </article>
+      <article class="mth__card">
+        <div class="mth__img"><img src="../source/media/tild3934-396_DSC08704.jpg" alt="Флористический консьерж-сервис"></div>
+        <div class="spec">Метод 04 · для бизнеса</div>
+        <h3 class="mth__name">Флористический консьерж-сервис</h3>
+        <p class="mth__descr">Концептуальные композиции для вашего пространства. Свежие цветы
+        и нужная атмосфера — по сезону и визуальному ДНК бренда.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ── ЛИСТ IV · РАБОТЫ ─────────────────── -->
+<section class="sheet" id="works">
+  <div class="sheet__no spec">Лист&nbsp;IV</div>
+  <div class="sheet__pad">
+    <div class="shd">
+      <h2>Опись работ</h2>
+      <span class="spec">Пять событий · 2025</span>
+    </div>
+
+    <div class="works">
+      <a class="wk" href="#">
+        <img src="../source/media/tild6530-643_IMG_0796_1.jpg" alt="Стол с белыми композициями в сводчатом зале">
+        <h3 class="wk__name">Chef’s Table</h3>
+        <p class="wk__descr">Арт-обед к юбилею Есенина</p>
+        <div class="wk__tag spec"><span>01</span><span>Сухоцвет</span></div>
+      </a>
+      <a class="wk" href="#">
+        <img src="../source/media/tild6361-623_IMG_8444_1.jpg" alt="Антуриумы и лепестки роз на белом рояле">
+        <h3 class="wk__name">Marco Polo</h3>
+        <p class="wk__descr">Паблик-ток о дейтинге</p>
+        <div class="wk__tag spec"><span>02</span><span>Антуриум · роза</span></div>
+      </a>
+      <a class="wk" href="#">
+        <img src="../source/media/tild6338-376_capture_23840.jpg" alt="Домашняя сервировка с антуриумами и каллами">
+        <h3 class="wk__name">Домашний сет-дизайн</h3>
+        <p class="wk__descr">Для Снежаны Георгиевой</p>
+        <div class="wk__tag spec"><span>03</span><span>Калла · тюльпан</span></div>
+      </a>
+      <a class="wk" href="#">
+        <img src="../source/media/tild6663-313_2025-05-22_203919.jpg" alt="Флористический акцент в бильярдном клубе">
+        <h3 class="wk__name">Billie</h3>
+        <p class="wk__descr">Новый взгляд на бильярд</p>
+        <div class="wk__tag spec"><span>04</span><span>Смешанный сбор</span></div>
+      </a>
+      <a class="wk" href="#">
+        <img src="../source/media/tild3738-633_2025-05-22_204218.jpg" alt="Расписанные антуриумы и синие дельфиниумы">
+        <h3 class="wk__name">Танец ХХ века</h3>
+        <p class="wk__descr">Еврейский музей · геометрия Малевича</p>
+        <div class="wk__tag spec"><span>05</span><span>Дельфиниум</span></div>
+      </a>
+      <a class="wk" href="#contact">
+        <img src="../source/media/tild3937-663_DSC08872.jpg" alt="Композиция для пространства бренда">
+        <h3 class="wk__name">Ваше событие</h3>
+        <p class="wk__descr">Следующий лист описи — за вами</p>
+        <div class="wk__tag spec"><span>06</span><span>Обсудить →</span></div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ── ЛИСТ V · СОСУДЫ ──────────────────── -->
+<section class="sheet" id="vessels">
+  <div class="sheet__no spec">Лист&nbsp;V</div>
+  <div class="sheet__pad">
+    <div class="shd">
+      <h2>Сосуды</h2>
+      <span class="spec">Керамика ручной работы · 6 форм</span>
+    </div>
+
+    <div class="vs">
+      <div class="vs__row">
+        <img src="../source/media/stor3837-666_90888100.jpg" alt="Stone Bowl">
+        <div class="vs__name">Stone Bowl</div>
+        <p class="vs__descr">Округлая форма с живой каменной фактурой. Воплощение устойчивости и спокойствия.</p>
+        <div class="vs__price">28 000 ₽</div>
+      </div>
+      <div class="vs__row">
+        <img src="../source/media/stor3162-653_23435811.jpg" alt="Linen Trace">
+        <div class="vs__name">Linen Trace</div>
+        <p class="vs__descr">Светлая ваза с вертикальными насечками. Простая форма с архитектурным ритмом.</p>
+        <div class="vs__price">28 000 ₽</div>
+      </div>
+      <div class="vs__row">
+        <img src="../source/media/stor3538-333_67787084.jpg" alt="Clay Ember">
+        <div class="vs__name">Clay Ember</div>
+        <p class="vs__descr">Теплая терракота с естественным блеском. Форма, созданная руками и временем.</p>
+        <div class="vs__price">28 000 ₽</div>
+      </div>
+      <div class="vs__row">
+        <img src="../source/media/stor3234-373_85274525.jpg" alt="Shadow Clay">
+        <div class="vs__name">Shadow Clay</div>
+        <p class="vs__descr">Матовая ваза глубокого коричнево-угольного оттенка. Лаконичный артефакт с характером.</p>
+        <div class="vs__price">28 000 ₽</div>
+      </div>
+      <div class="vs__row">
+        <img src="../source/media/stor3264-656_95950811.jpg" alt="Frost Vessel">
+        <div class="vs__name">Frost Vessel</div>
+        <p class="vs__descr">Серовато-белая поверхность, напоминающая иней. Грубая структура и лёгкость.</p>
+        <div class="vs__price">28 000 ₽</div>
+      </div>
+      <div class="vs__row">
+        <img src="../source/media/stor6366-646_96633821.jpg" alt="Sand Form">
+        <div class="vs__name">Sand Form</div>
+        <p class="vs__descr">Мягкий охристый оттенок и округлые линии. Баланс тепла и минимализма.</p>
+        <div class="vs__price">28 000 ₽</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ЭТИКЕТКА · КОНТАКТЫ ──────────────── -->
+<section class="sheet" id="contact">
+  <div class="sheet__no spec">Этикетка</div>
+  <div class="sheet__pad">
+    <div class="shd">
+      <h2>Опишите событие</h2>
+      <span class="spec">Ответим в течение дня</span>
+    </div>
+
+    <div class="lbl">
+      <div>
+        <div class="lbl__big">
+          <p><a href="https://wa.me/79167468668">+7 916 746 86 68</a></p>
+          <p><a href="https://www.instagram.com/elementbymosk">elementbymosk<sup>*</sup></a></p>
+        </div>
+        <p class="lbl__note">*Instagram (продукт компании Meta, признанной экстремистской организацией
+        в России и запрещённой на территории РФ)</p>
+      </div>
+      <form class="lbl__card" onsubmit="return false">
+        <label class="fl"><span class="spec">Имя</span><input type="text" placeholder="Как к вам обращаться"></label>
+        <label class="fl"><span class="spec">Телефон</span><input type="tel" placeholder="+7 (000) 000-00-00"></label>
+        <label class="fl"><span class="spec">Событие</span><input type="text" placeholder="Повод, дата, площадка"></label>
+        <button class="go" type="submit">Отправить</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap spec">
+    <span>Element by Моск — студия флористики и сет-дизайна</span>
+    <span>Москва</span>
+    <span>© 2026</span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var img = document.getElementById('idxImg');
+  var cap = document.getElementById('idxCap');
+  var note = document.getElementById('idxNote');
+  var btns = document.querySelectorAll('.idx__btn');
+
+  function show(btn){
+    btns.forEach(function(b){ b.setAttribute('aria-current', String(b === btn)); });
+    img.style.opacity = '0';
+    setTimeout(function(){
+      img.src = btn.getAttribute('data-img');
+      img.style.opacity = '1';
+    }, 180);
+    cap.textContent = btn.getAttribute('data-cap');
+    note.textContent = btn.getAttribute('data-note');
+  }
+
+  btns.forEach(function(btn){
+    btn.addEventListener('mouseenter', function(){ show(btn); });
+    btn.addEventListener('focus', function(){ show(btn); });
+    btn.addEventListener('click', function(){ show(btn); });
+  });
+})();
+</script>
+</body>
+</html>

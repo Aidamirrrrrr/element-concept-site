@@ -1,0 +1,573 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ELEMENT by МОСК — студия флористики и сет-дизайна в Москве</title>
+<meta name="description" content="Студия флористики и сет-дизайна ELEMENT by МОСК: оформление интерьеров, сет-дизайн мероприятий, декор событий и флористический консьерж-сервис. Керамические вазы ручной работы. Москва.">
+<meta name="theme-color" content="#EDECE7">
+<meta name="color-scheme" content="light">
+<link rel="canonical" href="https://elementbymosk.ru/">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ELEMENT by МОСК">
+<meta property="og:title" content="ELEMENT by МОСК — студия флористики и сет-дизайна">
+<meta property="og:description" content="Композиция строится не вокруг одного выразительного объекта, а на их взаимодействии. Флористика и сет-дизайн для частных клиентов и бизнеса.">
+<meta property="og:image" content="https://elementbymosk.ru/img/hero-main.jpg">
+<meta property="og:image:width" content="960">
+<meta property="og:image:height" content="1280">
+<meta property="og:url" content="https://elementbymosk.ru/">
+<meta property="og:locale" content="ru_RU">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
+
+<link rel="preload" href="fonts/literata-200-500-cyrillic.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/manrope-400-600-cyrillic.woff2" as="font" type="font/woff2" crossorigin>
+
+<link rel="preload" as="image" type="image/webp"
+      imagesrcset="img/hero-main-480.webp 480w, img/hero-main-960.webp 960w"
+      imagesizes="(max-width:900px) 100vw, (max-width:1500px) 40vw, 600px" fetchpriority="high">
+
+<!--CSS-->
+<link rel="stylesheet" href="css/fonts.css">
+<link rel="stylesheet" href="css/style.css">
+<!--/CSS-->
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "@id": "https://elementbymosk.ru/#studio",
+  "name": "ELEMENT by МОСК",
+  "alternateName": "Element by Моск",
+  "description": "Студия флористики и сет-дизайна. Оформление интерьеров, сет-дизайн мероприятий, декор событий, флористический консьерж-сервис.",
+  "url": "https://elementbymosk.ru/",
+  "telephone": "+79167468668",
+  "image": "https://elementbymosk.ru/img/hero-main.jpg",
+  "priceRange": "₽₽₽",
+  "address": {"@type": "PostalAddress", "addressLocality": "Москва", "addressCountry": "RU"},
+  "areaServed": {"@type": "City", "name": "Москва"},
+  "sameAs": ["https://www.instagram.com/elementbymosk"],
+  "makesOffer": [
+    {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Флористическое оформление интерьера"}},
+    {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Сет-дизайн для домашних мероприятий"}},
+    {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Декор мероприятий"}},
+    {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Флористический консьерж-сервис"}}
+  ]
+}
+</script>
+</head>
+<body>
+
+<a class="skip" href="#hero">Перейти к содержанию</a>
+
+<div class="loader" id="loader" aria-hidden="true">
+  <div class="loader__in">
+    <div class="loader__mark">Element <em>by</em> Моск</div>
+    <div class="loader__bar"><i id="loadBar"></i></div>
+    <div class="loader__num"><span id="loadNum">0</span>%</div>
+  </div>
+</div>
+
+<div class="cur" id="cur" aria-hidden="true">
+  <div class="cur__ring"><span class="cur__lbl">Смотреть</span></div>
+  <div class="cur__dot"></div>
+</div>
+<div class="peek" id="peek" aria-hidden="true">
+  <img alt="" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" width="1" height="1">
+</div>
+<div class="prog" aria-hidden="true"><i id="progBar"></i></div>
+
+<!-- ══════════ ШАПКА ══════════ -->
+<header class="top">
+  <div class="wrap top__in">
+    <a class="top__mark" href="#hero" aria-label="ELEMENT by МОСК, на главную">Element <em>by</em> Моск</a>
+
+    <nav class="top__nav" aria-label="Разделы сайта">
+      <a href="#studio">О нас</a>
+      <a href="#services">Услуги</a>
+      <a href="#vases">Вазы</a>
+      <a href="#works">Кейсы</a>
+      <a href="#contact">Контакты</a>
+    </nav>
+
+    <div class="top__act">
+      <a class="top__cta" href="#contact" data-magnet>Оставить заявку</a>
+
+      <button class="cartbtn" id="cartBtn" type="button" aria-label="Корзина, товаров: 0">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M4 7h16l-1.3 12.2a2 2 0 0 1-2 1.8H7.3a2 2 0 0 1-2-1.8L4 7Z"/>
+          <path d="M9 7V5.6A3 3 0 0 1 12 3a3 3 0 0 1 3 2.6V7"/>
+        </svg>
+        <span class="cartbtn__n" id="cartCount" aria-hidden="true">0</span>
+      </button>
+
+      <button class="burger" id="burger" type="button" aria-label="Открыть меню" aria-expanded="false" aria-controls="mnav">
+        <span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<nav class="mnav" id="mnav" aria-label="Меню" inert>
+  <a href="#studio">О нас</a>
+  <a href="#services">Услуги</a>
+  <a href="#vases">Вазы</a>
+  <a href="#works">Кейсы</a>
+  <a href="#contact">Контакты</a>
+  <a class="top__cta" href="#contact">Оставить заявку</a>
+</nav>
+
+<div id="viewport"><div id="content">
+<main>
+
+<!-- ══════════ ГЕРОЙ ══════════ -->
+<section class="hero" id="hero" aria-labelledby="heroTitle">
+  <div class="hero__cols" aria-hidden="true">
+    <div class="wrap">
+      <span style="--i:0"></span><span style="--i:1"></span><span style="--i:2"></span>
+      <span style="--i:3"></span><span style="--i:4"></span><span style="--i:5"></span>
+    </div>
+  </div>
+
+  <div class="wrap g12">
+    <div class="hero__type">
+      <p class="hero__meta mono rv" style="--i:0">
+        <span>Студия флористики и сет-дизайна</span><span>Москва</span><span>Опись работ — 05</span>
+      </p>
+
+      <h1 class="hero__title" id="heroTitle" data-lines>
+        <span class="ln" style="--i:1"><i>«Элемент»</i></span>
+        <span class="ln" style="--i:2"><i>как основа</i></span>
+        <span class="ln" style="--i:3"><i class="accent">композиции</i></span>
+      </h1>
+
+      <p class="hero__lede rv" style="--i:6">Композиция строится не вокруг одного выразительного
+      объекта, а на их взаимодействии. Каждый цветок, предмет, оттенок, текстура — части общей
+      концепции, в которой у каждой детали есть своя роль.</p>
+
+      <div class="hair" style="margin-top:clamp(22px,3.2vh,36px)"></div>
+      <dl class="hero__facts rv" style="--i:7">
+        <div class="fact"><dt><b data-count="4">4</b></dt><dd>формата работы</dd></div>
+        <div class="fact"><dt><b data-count="360" data-suffix="°">360°</b></dt><dd>от концепции до монтажа</dd></div>
+        <div class="fact"><dt><b data-count="6">6</b></dt><dd>форм в коллекции ваз</dd></div>
+      </dl>
+    </div>
+
+    <div class="hero__art">
+      <figure class="a imgrv" style="--i:3" data-par="-.045">
+        <picture>
+          <source type="image/webp" srcset="img/hero-main-480.webp 480w, img/hero-main-960.webp 960w"
+                  sizes="(max-width:900px) 100vw, (max-width:1500px) 40vw, 600px">
+          <img src="img/hero-main.jpg" alt="Пионы и садовые цветы в каменной вазе на светлой стойке ресепшена"
+               width="960" height="1280" data-inner=".07" fetchpriority="high" decoding="async">
+        </picture>
+      </figure>
+      <figure class="b imgrv" style="--i:6" data-par=".075">
+        <picture>
+          <source type="image/webp" srcset="img/hero-inset-480.webp 480w, img/hero-inset-700.webp 700w"
+                  sizes="(max-width:900px) 42vw, (max-width:1500px) 19vw, 280px">
+          <img src="img/hero-inset.jpg" alt="Красные антуриумы и лепестки роз на белом рояле"
+               width="700" height="1050" data-inner=".05" loading="lazy" decoding="async">
+        </picture>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ О НАС ══════════ -->
+<section class="sec sec--paper" id="studio" aria-labelledby="studioTitle">
+  <div class="wrap g12">
+    <div class="shead">
+      <div class="shead__l">
+        <p class="mono mono--red rv">О нас</p>
+        <h2 id="studioTitle" data-words>Материалы доступны всем. Разница — в композиционном мышлении</h2>
+      </div>
+      <p class="shead__r mono rv" style="--i:1">Москва</p>
+    </div>
+
+    <p class="mf__lead" data-words>Мы видим магию в каждом отдельном элементе, красоту — в каждом цветке.</p>
+    <div class="mf__body rv" style="--i:1">
+      <p>Все художники творят одними и теми же красками и кистями, но ценность произведения
+      определяется не инструментами, а креативным видением и мастерством. Во флористике и
+      сет-дизайне действует тот же принцип: исходные материалы — цветы, растения — доступны всем,
+      но результат зависит от идеи и композиционного мышления.</p>
+      <p>Именно это превращает декор пространства в продуманную сцену, а цветы — в грациозный
+      букет, где каждый элемент служит единому замыслу. Композиция строится не вокруг одного
+      выразительного объекта, а на их взаимодействии — чтобы оформление каждый раз рассказывало
+      новую историю для вашего события.</p>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <figure class="plate imgrv" data-par="-.03">
+      <picture>
+        <source type="image/webp"
+                srcset="img/plate-reception-480.webp 480w, img/plate-reception-960.webp 960w, img/plate-reception-1440.webp 1440w"
+                sizes="(max-width:1500px) 92vw, 1300px">
+        <img src="img/plate-reception.jpg" alt="Сервировочная стойка с нарциссами и ранункулюсами в вечернем свете"
+             width="1680" height="1119" data-inner=".08" loading="lazy" decoding="async">
+      </picture>
+    </figure>
+    <p class="plate__cap mono rv"><span>Пл. 01 — сет-дизайн приёма</span><span>Москва</span></p>
+  </div>
+</section>
+
+<!-- ══════════ БЕГУЩАЯ СТРОКА ══════════ -->
+<div class="tick" aria-hidden="true">
+  <div class="tick__track" id="tick">
+    <span>Флористика</span><span>Сет-дизайн</span><span>Декор мероприятий</span><span>Консьерж-сервис</span>
+    <span>Флористика</span><span>Сет-дизайн</span><span>Декор мероприятий</span><span>Консьерж-сервис</span>
+  </div>
+</div>
+
+<!-- ══════════ УСЛУГИ ══════════ -->
+<section class="sec" id="services" aria-labelledby="servicesTitle">
+  <div class="wrap g12">
+    <div class="shead">
+      <div class="shead__l">
+        <p class="mono mono--red rv">Услуги</p>
+        <h2 id="servicesTitle" data-words>Четыре формата работы — от одной композиции до сопровождения события целиком</h2>
+      </div>
+      <p class="shead__r mono rv" style="--i:1">Частным клиентам<br>Для бизнеса</p>
+    </div>
+
+    <div class="tabs rv" role="tablist" aria-label="Аудитория">
+      <button role="tab" type="button" id="tabPrivate" aria-selected="true" aria-controls="panelPrivate" data-panel="private">Частным клиентам</button>
+      <button role="tab" type="button" id="tabBusiness" aria-selected="false" aria-controls="panelBusiness" data-panel="business">Для бизнеса</button>
+    </div>
+
+    <div class="svcs" id="panelPrivate" role="tabpanel" aria-labelledby="tabPrivate" data-tabpanel="private">
+      <article class="svc">
+        <figure class="svc__media imgrv"><span class="svc__n" data-par=".07" aria-hidden="true">01</span>
+          <picture>
+            <source type="image/webp" srcset="img/svc-interior-01-480.webp 480w, img/svc-interior-01-960.webp 960w"
+                    sizes="(max-width:900px) 100vw, (max-width:1500px) 46vw, 690px">
+            <img src="img/svc-interior-01.jpg" alt="Флористическая композиция в жилом интерьере"
+                 width="960" height="1280" data-inner=".06" loading="lazy" decoding="async">
+          </picture>
+        </figure>
+        <div class="svc__text rv">
+          <p class="mono">01 · частным клиентам</p>
+          <h3 class="svc__name">Флористическое оформление интерьера</h3>
+          <p class="svc__descr">Индивидуальные декоративные решения, подчеркивающие атмосферу
+          праздника и стиль вашего дома. От элегантных цветочных акцентов до комплексного
+          оформления пространства.</p>
+          <button class="link-arrow" type="button" data-service="interior">Смотреть работы <span aria-hidden="true">→</span></button>
+        </div>
+      </article>
+
+      <article class="svc">
+        <figure class="svc__media imgrv"><span class="svc__n" data-par=".07" aria-hidden="true">02</span>
+          <picture>
+            <source type="image/webp" srcset="img/svc-home-set-01-480.webp 480w, img/svc-home-set-01-960.webp 960w, img/svc-home-set-01-1440.webp 1440w"
+                    sizes="(max-width:900px) 100vw, (max-width:1500px) 46vw, 690px">
+            <img src="img/svc-home-set-01.jpg" alt="Сервировка стола для домашнего мероприятия"
+                 width="1680" height="1120" data-inner=".06" loading="lazy" decoding="async">
+          </picture>
+        </figure>
+        <div class="svc__text rv">
+          <p class="mono">02 · частным клиентам</p>
+          <h3 class="svc__name">Сет-дизайн для домашних мероприятий</h3>
+          <p class="svc__descr">Создаем праздничное оформление для любого повода, наполняя
+          пространство атмосферой торжества. Индивидуальный подход и работа с концепцией
+          и форматом вашего праздника.</p>
+          <button class="link-arrow" type="button" data-service="home-set">Смотреть работы <span aria-hidden="true">→</span></button>
+        </div>
+      </article>
+    </div>
+
+    <div class="svcs" id="panelBusiness" role="tabpanel" aria-labelledby="tabBusiness" data-tabpanel="business" hidden>
+      <article class="svc">
+        <figure class="svc__media imgrv"><span class="svc__n" data-par=".07" aria-hidden="true">03</span>
+          <picture>
+            <source type="image/webp" srcset="img/svc-event-decor-01-480.webp 480w, img/svc-event-decor-01-960.webp 960w"
+                    sizes="(max-width:900px) 100vw, (max-width:1500px) 46vw, 690px">
+            <img src="img/svc-event-decor-01.jpg" alt="Флористический декор площадки мероприятия"
+                 width="1080" height="1346" data-inner=".06" loading="lazy" decoding="async">
+          </picture>
+        </figure>
+        <div class="svc__text rv">
+          <p class="mono">03 · для бизнеса</p>
+          <h3 class="svc__name">Декор мероприятий</h3>
+          <p class="svc__descr">Индивидуально разработанные флористические оформления для ваших
+          событий. Поддержка 360 — от разработки концепции до реализации.</p>
+          <button class="link-arrow" type="button" data-service="event-decor">Смотреть работы <span aria-hidden="true">→</span></button>
+        </div>
+      </article>
+
+      <article class="svc">
+        <figure class="svc__media imgrv"><span class="svc__n" data-par=".07" aria-hidden="true">04</span>
+          <picture>
+            <source type="image/webp" srcset="img/svc-concierge-01-480.webp 480w, img/svc-concierge-01-960.webp 960w"
+                    sizes="(max-width:900px) 100vw, (max-width:1500px) 46vw, 690px">
+            <img src="img/svc-concierge-01.jpg" alt="Сезонная композиция в пространстве бренда"
+                 width="960" height="1280" data-inner=".06" loading="lazy" decoding="async">
+          </picture>
+        </figure>
+        <div class="svc__text rv">
+          <p class="mono">04 · для бизнеса</p>
+          <h3 class="svc__name">Флористический консьерж-сервис</h3>
+          <p class="svc__descr">Концептуальные цветочные композиции для вашего пространства.
+          Гарантия наличия свежих цветов и создание нужной атмосферы, в соответствии с сезоном
+          и визуальным ДНК вашего бренда.</p>
+          <button class="link-arrow" type="button" data-service="concierge">Смотреть работы <span aria-hidden="true">→</span></button>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ ВАЗЫ ══════════ -->
+<section class="sec sec--paper" id="vases" aria-labelledby="vasesTitle">
+  <div class="wrap g12">
+    <div class="shead">
+      <div class="shead__l">
+        <p class="mono mono--red rv">Вазы</p>
+        <h2 id="vasesTitle" data-words>Керамические вазы ручной работы</h2>
+      </div>
+      <p class="shead__r mono rv" style="--i:1">6 форм · 28 000 ₽</p>
+    </div>
+
+    <ul class="cat" id="cat"></ul>
+  </div>
+</section>
+
+<!-- ══════════ КЕЙСЫ ══════════ -->
+<section class="sec" id="works" aria-labelledby="worksTitle">
+  <div class="wrap g12">
+    <div class="shead">
+      <div class="shead__l">
+        <p class="mono mono--red rv">Кейсы</p>
+        <h2 id="worksTitle" data-words>Пять событий, где флористика была частью замысла</h2>
+      </div>
+      <p class="shead__r mono rv" style="--i:1">2025</p>
+    </div>
+
+    <div class="works">
+      <button class="w w--lead" type="button" data-case="chefs-table" data-view>
+        <span class="w__frame imgrv">
+          <picture>
+            <source type="image/webp" srcset="img/case-chefs-table-cover-480.webp 480w, img/case-chefs-table-cover-700.webp 700w"
+                    sizes="(max-width:900px) 100vw, (max-width:1500px) 55vw, 800px">
+            <img src="img/case-chefs-table-cover.jpg" alt="Сервированный стол с белыми композициями в сводчатом зале"
+                 width="700" height="1050" data-inner=".07" loading="lazy" decoding="async">
+          </picture>
+        </span>
+        <span class="w__no mono mono--red">01</span>
+        <span class="w__name">Chef’s Table</span>
+        <span class="w__descr">Оформление арт-обеда к юбилею Есенина</span>
+        <span class="w__meta mono"><span>Ресторан Chef’s Table</span><span>Клуб МОСК</span><span>«Ешь искусство»</span></span>
+      </button>
+
+      <button class="w w--tall" type="button" data-case="marco-polo" data-view>
+        <span class="w__frame imgrv" style="--i:1">
+          <picture>
+            <source type="image/webp" srcset="img/hero-inset-480.webp 480w, img/hero-inset-700.webp 700w"
+                    sizes="(max-width:900px) 100vw, (max-width:1500px) 30vw, 450px">
+            <img src="img/hero-inset.jpg" alt="Красные антуриумы и лепестки роз на белом рояле"
+                 width="700" height="1050" data-inner=".07" loading="lazy" decoding="async">
+          </picture>
+        </span>
+        <span class="w__no mono mono--red">02</span>
+        <span class="w__name">Marco Polo</span>
+        <span class="w__descr">Оформление паблик-тока о дейтинге</span>
+        <span class="w__meta mono"><span>Отель Marco Polo</span><span>Moss Hospitality</span></span>
+      </button>
+
+      <button class="w w--third" type="button" data-case="home-set-design" data-view>
+        <span class="w__frame imgrv">
+          <picture>
+            <source type="image/webp" srcset="img/case-home-set-design-cover-480.webp 480w, img/case-home-set-design-cover-700.webp 700w"
+                    sizes="(max-width:900px) 100vw, (max-width:1500px) 30vw, 450px">
+            <img src="img/case-home-set-design-cover.jpg" alt="Домашняя сервировка с антуриумами и каллами"
+                 width="700" height="933" data-inner=".07" loading="lazy" decoding="async">
+          </picture>
+        </span>
+        <span class="w__no mono mono--red">03</span>
+        <span class="w__name">Домашний сет-дизайн</span>
+        <span class="w__descr">Для Снежаны Георгиевой</span>
+        <span class="w__meta mono"><span>Частный дом</span></span>
+      </button>
+
+      <button class="w w--third" type="button" data-case="billie" data-view>
+        <span class="w__frame imgrv" style="--i:1">
+          <picture>
+            <source type="image/webp" srcset="img/case-billie-cover-480.webp 480w, img/case-billie-cover-700.webp 700w"
+                    sizes="(max-width:900px) 100vw, (max-width:1500px) 30vw, 450px">
+            <img src="img/case-billie-cover.jpg" alt="Флористический акцент в бильярдном клубе"
+                 width="700" height="872" data-inner=".07" loading="lazy" decoding="async">
+          </picture>
+        </span>
+        <span class="w__no mono mono--red">04</span>
+        <span class="w__name">Billie</span>
+        <span class="w__descr">Новый взгляд на бильярд</span>
+        <span class="w__meta mono"><span>Бильярдный клуб Billie</span><span>Клуб МОСК</span></span>
+      </button>
+
+      <button class="w w--third" type="button" data-case="dance-xx" data-view>
+        <span class="w__frame imgrv" style="--i:2">
+          <picture>
+            <source type="image/webp" srcset="img/case-dance-xx-cover-480.webp 480w, img/case-dance-xx-cover-700.webp 700w"
+                    sizes="(max-width:900px) 100vw, (max-width:1500px) 30vw, 450px">
+            <img src="img/case-dance-xx-cover.jpg" alt="Расписанные вручную антуриумы и синие дельфиниумы"
+                 width="700" height="875" data-inner=".07" loading="lazy" decoding="async">
+          </picture>
+        </span>
+        <span class="w__no mono mono--red">05</span>
+        <span class="w__name">Танец ХХ века</span>
+        <span class="w__descr">Оформление в Еврейском музее</span>
+        <span class="w__meta mono"><span>Еврейский музей</span><span>Ксения Чилингарова</span></span>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ КОНТАКТЫ ══════════ -->
+<section class="sec sec--paper" id="contact" aria-labelledby="contactTitle">
+  <div class="wrap g12">
+    <div class="shead">
+      <div class="shead__l">
+        <p class="mono mono--red rv">Контакты</p>
+        <h2 id="contactTitle" data-words>Расскажите о событии — предложим композицию</h2>
+      </div>
+      <p class="shead__r mono rv" style="--i:1">Ответим в течение дня</p>
+    </div>
+
+    <div class="ct">
+      <div class="ct__left rv">
+        <p class="ct__line">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M20.5 11.6a8.4 8.4 0 0 1-12.3 7.4L3.5 20.5l1.6-4.6A8.4 8.4 0 1 1 20.5 11.6Z"/>
+            <path d="M8.8 8.3c.2-.5.5-.5.8-.5h.6c.2 0 .5 0 .7.5l.7 1.7c.1.3 0 .5-.1.7l-.5.6c-.2.2-.3.4-.1.7a7 7 0 0 0 3.1 2.7c.3.1.5.1.7-.1l.6-.7c.2-.2.4-.2.7-.1l1.7.8c.3.1.4.3.4.6a1.9 1.9 0 0 1-1.3 1.8c-.6.2-1.4.3-4.1-1.1a10 10 0 0 1-4-4.2c-.9-1.8-.4-3 .1-3.4Z"/>
+          </svg>
+          <a href="https://wa.me/79167468668" target="_blank" rel="noopener">+7 916 746 86 68</a>
+        </p>
+
+        <p class="ct__line">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <rect x="3.2" y="3.2" width="17.6" height="17.6" rx="5"/>
+            <circle cx="12" cy="12" r="4.1"/>
+            <circle cx="17.1" cy="6.9" r="1.1" fill="currentColor" stroke="none"/>
+          </svg>
+          <a href="https://www.instagram.com/elementbymosk" target="_blank" rel="noopener">elementbymosk<sup>*</sup></a>
+        </p>
+
+        <p class="ct__note">*Instagram (продукт компании Meta, признанной экстремистской организацией
+        в России и запрещённой на территории РФ)</p>
+      </div>
+
+      <form class="ct__form rv" id="leadForm" style="--i:1" novalidate>
+        <div class="fld">
+          <label class="mono" for="leadName">Ваше имя</label>
+          <input id="leadName" type="text" name="name" autocomplete="name" placeholder="Как к вам обращаться" required>
+          <span class="fld__err" data-err role="alert"></span>
+        </div>
+        <div class="fld">
+          <label class="mono" for="leadPhone">Телефон</label>
+          <input id="leadPhone" type="tel" name="phone" inputmode="tel" autocomplete="tel"
+                 placeholder="+7 (___) ___-__-__" required data-mask="phone">
+          <span class="fld__err" data-err role="alert"></span>
+        </div>
+        <button class="btn" type="submit" data-magnet>Отправить</button>
+        <p class="formok" id="leadOk" role="status">Заявка отправлена — свяжемся с вами</p>
+      </form>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap mono">
+    <span>Element by Моск — студия флористики и сет-дизайна</span>
+    <span>Москва</span>
+    <span>© 2026</span>
+  </div>
+</footer>
+
+</div></div>
+
+<!-- ══════════ КОРЗИНА ══════════ -->
+<div class="scrim" id="scrim"></div>
+
+<aside class="drawer" id="cart" aria-label="Корзина" aria-hidden="true" inert>
+  <div class="drawer__hd">
+    <h2 class="drawer__ttl">Ваш заказ</h2>
+    <button class="close" type="button" data-close aria-label="Закрыть корзину">
+      <svg viewBox="0 0 14 14" aria-hidden="true" focusable="false"><path d="M1 1l12 12M13 1L1 13"/></svg>
+    </button>
+  </div>
+
+  <div class="drawer__body" id="cartBody"></div>
+
+  <div class="drawer__ft" id="cartFoot" hidden>
+    <p class="ctotal"><span class="mono">Итоговая сумма</span><b id="cartTotal">0 ₽</b></p>
+    <p class="mono cnote">Оплаты на сайте нет — свяжемся и согласуем детали</p>
+    <form id="orderForm" novalidate>
+      <div class="fld">
+        <label class="mono" for="orderName">Имя</label>
+        <input id="orderName" type="text" name="name" autocomplete="name" placeholder="Как к вам обращаться" required>
+        <span class="fld__err" data-err role="alert"></span>
+      </div>
+      <div class="fld">
+        <label class="mono" for="orderPhone">Телефон</label>
+        <input id="orderPhone" type="tel" name="phone" inputmode="tel" autocomplete="tel"
+               placeholder="+7 (___) ___-__-__" required data-mask="phone">
+        <span class="fld__err" data-err role="alert"></span>
+      </div>
+      <button class="btn" type="submit">Оставить заявку</button>
+      <p class="formok" id="orderOk" role="status">Заявка принята — свяжемся с вами</p>
+    </form>
+  </div>
+</aside>
+
+<!-- ══════════ МОДАЛКА ТОВАРА ══════════ -->
+<div class="modal" id="prodModal" role="dialog" aria-modal="true" aria-labelledby="pdName" aria-hidden="true" inert>
+  <div class="modal__box">
+    <button class="close modal__close" type="button" data-close aria-label="Закрыть">
+      <svg viewBox="0 0 14 14" aria-hidden="true" focusable="false"><path d="M1 1l12 12M13 1L1 13"/></svg>
+    </button>
+    <div class="modal__grid">
+      <div>
+        <div class="gal__main" id="pdImg"></div>
+        <div class="gal__thumbs" id="pdThumbs"></div>
+      </div>
+      <div>
+        <h2 class="pd__name" id="pdName"></h2>
+        <p class="pd__descr" id="pdDescr"></p>
+        <p class="pd__price" id="pdPrice"></p>
+        <div class="pd__row">
+          <button class="pd__add" type="button" id="pdAdd">В корзину</button>
+        </div>
+        <p class="pd__note">Керамика ручной работы. Каждая ваза уникальна — фактура и оттенок
+        могут незначительно отличаться от снимка. Оплаты на сайте нет: оставьте заявку,
+        свяжемся и согласуем доставку по Москве.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ МОДАЛКА КЕЙСА ══════════ -->
+<div class="modal" id="caseModal" role="dialog" aria-modal="true" aria-labelledby="csTitle" aria-hidden="true" inert>
+  <div class="modal__box">
+    <button class="close modal__close" type="button" data-close aria-label="Закрыть">
+      <svg viewBox="0 0 14 14" aria-hidden="true" focusable="false"><path d="M1 1l12 12M13 1L1 13"/></svg>
+    </button>
+    <h2 class="cs__title" id="csTitle"></h2>
+    <p class="cs__meta mono" id="csMeta"></p>
+    <div class="cs__text" id="csText"></div>
+    <div class="cs__gal" id="csGal"></div>
+    <p class="cs__cta">
+      <button class="link-arrow" type="button" data-goto="#contact">Связаться с нами <span aria-hidden="true">→</span></button>
+    </p>
+  </div>
+</div>
+
+<script src="js/data.js" defer></script>
+<script src="js/app.js" defer></script>
+</body>
+</html>

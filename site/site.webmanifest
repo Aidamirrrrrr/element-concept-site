@@ -1,0 +1,16 @@
+{
+  "name": "ELEMENT by МОСК — студия флористики и сет-дизайна",
+  "short_name": "ELEMENT",
+  "description": "Флористика и сет-дизайн в Москве: оформление интерьеров, декор мероприятий, керамические вазы ручной работы.",
+  "lang": "ru",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#EDECE7",
+  "theme_color": "#EDECE7",
+  "icons": [
+    { "src": "favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "apple-touch-icon.png", "sizes": "180x180", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ELEMENT by МОСК — пять направлений</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,200..400&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#E9E8E3;--ink:#1A1C1A;--muted:#71736D;--line:#D2D1C9}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:"Manrope",system-ui,sans-serif;
+  font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+img{display:block;max-width:100%}
+.wrap{max-width:1240px;margin-inline:auto;padding:clamp(32px,7vh,80px) clamp(20px,4vw,56px)}
+h1{font-family:"Literata",serif;font-weight:200;font-size:clamp(30px,4.6vw,58px);
+  line-height:1.05;letter-spacing:-.025em;max-width:18ch}
+.lede{color:var(--muted);max-width:60ch;padding-top:16px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(16px,2.4vw,34px);padding-top:clamp(32px,6vh,64px)}
+@media (max-width:1040px){.grid{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:700px){.grid{grid-template-columns:1fr}}
+.card{border:1px solid var(--line);background:#fff;overflow:hidden;transition:transform .4s cubic-bezier(.2,.7,.2,1),box-shadow .4s}
+.card:hover{transform:translateY(-4px);box-shadow:0 18px 44px rgba(26,28,26,.1)}
+.card__sw{display:flex;height:120px}
+.card__sw span{flex:1}
+.card__b{padding:22px 22px 26px}
+.card__no{font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.card__t{font-family:"Literata",serif;font-weight:300;font-size:26px;letter-spacing:-.015em;padding:8px 0 10px}
+.card__d{color:var(--muted);font-size:15px}
+.card__m{font-size:13px;color:var(--muted);padding-top:14px;border-top:1px solid var(--line);margin-top:16px}
+.card__m b{color:var(--ink);font-weight:600}
+.card--wide{display:block;margin-top:clamp(28px,5vh,52px);border-color:var(--ink)}
+.card--wide .card__sw{height:64px}
+.card--wide .card__t{font-size:32px}
+.card--wide .card__d{max-width:70ch}
+.card--wide .card__no{color:var(--ink)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>ELEMENT by МОСК — пять направлений</h1>
+  <p class="lede">Пять полноценных мокапов на реальном контенте и фотографиях студии.
+  Не варианты одной идеи, а пять разных ответов на вопрос «чем этот сайт должен быть».
+  01–03 — сдержанные, 04–05 — с характером.</p>
+
+  <a class="card card--wide" href="final.html">
+    <div class="card__sw"><span style="background:#EDECE7"></span><span style="background:#17191A"></span><span style="background:#9E2B20"></span><span style="background:#5C6B4E"></span></div>
+    <div class="card__b">
+      <div class="card__no">Сводный макет · выбран заказчиком</div>
+      <div class="card__t">Архив × Композиция</div>
+      <p class="card__d">Сплав 01 и 03: серифный дисплей и модульная сетка из «Композиции»,
+      каталожная таблица ваз, мета-типографика и красный акцент из «Архива». С анимацией.</p>
+      <p class="card__m"><b>Literata + Manrope + IBM Plex Mono</b> · костяной, чёрный, музейный красный, олива</p>
+    </div>
+  </a>
+
+  <div class="grid">
+    <a class="card" href="01-archive.html">
+      <div class="card__sw"><span style="background:#E6E5E1"></span><span style="background:#15171A"></span><span style="background:#9E2B20"></span></div>
+      <div class="card__b">
+        <div class="card__no">01</div>
+        <div class="card__t">Архив</div>
+        <p class="card__d">Сайт как каталог выставки: опись работ, линейки, табличные подписи.
+        Титульный экран — типографика, а не фотография.</p>
+        <p class="card__m"><b>Golos Text + IBM Plex Mono</b> · плаcтеровый серый, музейный красный</p>
+      </div>
+    </a>
+
+    <a class="card" href="02-night.html">
+      <div class="card__sw"><span style="background:#0A0A0B"></span><span style="background:#EDE9E1"></span><span style="background:#C6A15B"></span></div>
+      <div class="card__b">
+        <div class="card__no">02</div>
+        <div class="card__t">Ночь</div>
+        <p class="card__d">Кинематографичный тёмный сайт: полноэкранное фото, крупный лёгкий
+        гротеск, работы — горизонтальной лентой.</p>
+        <p class="card__m"><b>Unbounded + Onest</b> · чёрный, тёплый белый, латунь</p>
+      </div>
+    </a>
+
+    <a class="card" href="03-composition.html">
+      <div class="card__sw"><span style="background:#EFEEE9"></span><span style="background:#1B241D"></span><span style="background:#586B4C"></span></div>
+      <div class="card__b">
+        <div class="card__no">03</div>
+        <div class="card__t">Композиция</div>
+        <p class="card__d">Манифест студии буквально: модульная сетка, где фотографии —
+        элементы разного веса, собирающиеся в целое.</p>
+        <p class="card__m"><b>Literata + Manrope</b> · костяной, зелёно-чёрный, олива</p>
+      </div>
+    </a>
+
+    <a class="card" href="04-herbarium.html">
+      <div class="card__sw"><span style="background:#DBDAD0"></span><span style="background:#2E4A6B"></span><span style="background:#A8792C"></span></div>
+      <div class="card__b">
+        <div class="card__no">04</div>
+        <div class="card__t">Гербарий</div>
+        <p class="card__d">Сайт как гербарные листы: приколотые карточки-образцы, этикетки,
+        координатная сетка. Интерактивный указатель элементов.</p>
+        <p class="card__m"><b>Prata + JetBrains Mono</b> · картон, архивная синь, охра</p>
+      </div>
+    </a>
+
+    <a class="card" href="05-stage.html">
+      <div class="card__sw"><span style="background:#F1ECE3"></span><span style="background:#5A1220"></span><span style="background:#C99A3E"></span></div>
+      <div class="card__b">
+        <div class="card__no">05</div>
+        <div class="card__t">Сцена</div>
+        <p class="card__d">Театральная программка: услуги — действия I–IV, кейсы — премьеры,
+        вазы — реквизит, форма — касса. Бегущая строка.</p>
+        <p class="card__m"><b>Oswald + Playfair Display</b> · бордо, кость, золото</p>
+      </div>
+    </a>
+  </div>
+</div>
+</body>
+</html>
