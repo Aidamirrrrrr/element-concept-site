@@ -111,7 +111,8 @@ html.has-cur input,html.has-cur textarea{cursor:text}
   clip-path:inset(0 0 100% 0);transform:scale(1.12);
   transition:clip-path 1.25s var(--ease-out),transform 1.7s var(--ease-out);
   transition-delay:calc(var(--i,0)*95ms)}
-.imgrv.is-in>img{clip-path:inset(0);transform:scale(1)}
+/* именно потомок, а не прямой ребёнок: <img> лежит внутри <picture> */
+.imgrv.is-in img{clip-path:inset(0);transform:scale(1)}
 
 .ln,.wd{display:inline-block;overflow:hidden;vertical-align:top}
 .ln{display:block}

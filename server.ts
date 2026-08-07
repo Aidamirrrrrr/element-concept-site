@@ -131,10 +131,12 @@ function normalizePhone(raw: string) {
   return `+7 (${d.slice(1, 4)}) ${d.slice(4, 7)}-${d.slice(7, 9)}-${d.slice(9, 11)}`;
 }
 
-function validContact(name: string, phone: string) {
-  if (name.length < 2) return 'Укажите имя';
-  if (!normalizePhone(phone)) return 'Укажите телефон полностью';
-  return null;
+function validName(name: string) {
+  return name.length < 2 ? 'Укажите имя' : null;
+}
+
+function validEmail(mail: string) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(mail) ? null : 'Проверьте адрес почты';
 }
 
 function stamp() {
@@ -157,7 +159,7 @@ async function handleLead(req: Request, ip: string) {
 
   const name = clean(body.name, 120);
   const raw = clean(body.phone, 40);
-  const err = validContact(name, raw);
+  const err = validName(name) ?? (normalizePhone(raw) ? null : 'Укажите телефон полностью');
   if (err) return json({ ok: false, error: err }, 422);
   if (rateLimited(ip)) return json({ ok: false, error: 'Слишком много заявок. Попробуйте позже.' }, 429);
   const phone = normalizePhone(raw)!;
@@ -179,10 +181,9 @@ async function handleOrder(req: Request, ip: string) {
   if (!body) return json({ ok: false, error: 'Некорректный запрос' }, 400);
 
   const name = clean(body.name, 120);
-  const raw = clean(body.phone, 40);
-  const err = validContact(name, raw);
+  const email = clean(body.email, 160);
+  const err = validName(name) ?? validEmail(email);
   if (err) return json({ ok: false, error: err }, 422);
-  const phone = normalizePhone(raw)!;
 
   const items: Item[] = Array.isArray(body.items) ? body.items.slice(0, 50) : [];
   if (!items.length) return json({ ok: false, error: 'Корзина пуста' }, 422);
@@ -203,13 +204,13 @@ async function handleOrder(req: Request, ip: string) {
     `\n──────────────────────────────────────────\n` +
     `ЗАКАЗ  ${stamp()}\n` +
     `Имя:      ${name}\n` +
-    `Телефон:  ${phone}\n` +
+    `Email:    ${email}\n` +
     `Состав:\n${lines.join('\n')}\n` +
     `Итого:    ${total.toLocaleString('ru-RU')} ₽\n` +
     `Оплата:   не проводилась — связаться и согласовать\n`;
 
   await record('orders.txt', block);
-  console.log(`[заказ] ${name} · ${phone} · ${total.toLocaleString('ru-RU')} ₽`);
+  console.log(`[заказ] ${name} · ${email} · ${total.toLocaleString('ru-RU')} ₽`);
   return json({ ok: true });
 }
 

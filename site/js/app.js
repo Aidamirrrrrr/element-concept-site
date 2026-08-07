@@ -101,16 +101,24 @@ $$('[data-count]').forEach(function (el) {
   if (reduce) { el.textContent = to + sfx; return; }
   el.textContent = '0' + sfx;
 
-  var started = false;
+  var started = false, done = false;
   function run() {
     if (started) return;
     started = true;
     var t0 = performance.now();
     (function step(now) {
       var p = clamp((now - t0) / 1400, 0, 1);
+      if (done) return;
       el.textContent = Math.round(to * (1 - Math.pow(1 - p, 3))) + sfx;
       if (p < 1) requestAnimationFrame(step);
+      else done = true;
     })(t0);
+    /* в фоновой вкладке requestAnimationFrame не вызывается — досчитываем сами */
+    setTimeout(function () {
+      if (done) return;
+      done = true;
+      el.textContent = to + sfx;
+    }, 2200);
   }
   if ('IntersectionObserver' in window) {
     new IntersectionObserver(function (en, obs) {
@@ -755,6 +763,11 @@ if (skipLoader) {
     loadBar.style.transform = 'scaleX(' + (pct / 100) + ')';
     if (p < 1) requestAnimationFrame(count); else finish();
   })(t0);
+
+  /* Подстраховка: в фоновой вкладке rAF не вызывается, и без неё
+     страница осталась бы навсегда под заставкой. */
+  setTimeout(finish, 1800);
+  addEventListener('pageshow', finish);
 
   boot();
 }
