@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════════════
-   ELEMENT by МОСК — студия флористики и сет-дизайна
+   ELEMENT CONCEPT — студия флористики и сет-дизайна
    Направление: «Архив» × «Композиция»
    ═══════════════════════════════════════════════════════════ */
 
@@ -67,9 +67,8 @@ section[id]{scroll-margin-top:var(--head-h)}
 .loader.is-done{clip-path:inset(0 0 100% 0);pointer-events:none}
 .loader__in{width:min(560px,74vw);text-align:center}
 .loader__mark{font-family:var(--display);font-weight:200;font-size:clamp(24px,3.4vw,46px);
-  letter-spacing:-.02em;opacity:0;transform:translateY(14px);
+  letter-spacing:.08em;text-transform:uppercase;opacity:0;transform:translateY(14px);
   transition:opacity .8s ease .1s,transform .9s var(--ease) .1s}
-.loader__mark em{font-style:italic;color:var(--red)}
 .is-boot .loader__mark{opacity:1;transform:none}
 .loader__bar{height:1px;background:var(--line);margin:26px 0 12px;overflow:hidden}
 .loader__bar i{display:block;height:100%;background:var(--ink);transform:scaleX(0);transform-origin:0 50%}
@@ -120,8 +119,8 @@ section[id]{scroll-margin-top:var(--head-h)}
   transform:translateY(-100%);transition:transform .9s var(--ease-out) .1s}
 .is-live .top{transform:none}
 .top__in{display:flex;align-items:center;gap:clamp(12px,2vw,28px);height:var(--head-h)}
-.top__mark{font-family:var(--display);font-weight:400;font-size:19px;letter-spacing:-.01em;white-space:nowrap}
-.top__mark em{font-style:italic;color:var(--red)}
+.top__mark{font-family:var(--display);font-weight:400;font-size:18px;letter-spacing:.07em;
+  text-transform:uppercase;white-space:nowrap}
 .top__nav{display:flex;gap:clamp(14px,1.8vw,28px);margin-left:auto}
 .top__nav a{position:relative;font-family:var(--mono);font-size:12px;letter-spacing:.1em;
   text-transform:uppercase;color:var(--muted);padding-block:5px;transition:color .3s}

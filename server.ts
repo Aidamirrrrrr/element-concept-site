@@ -1,5 +1,5 @@
 /**
- * ELEMENT by МОСК — раздача сайта и приём заявок.
+ * ELEMENT CONCEPT — раздача сайта и приём заявок.
  *
  *   bun run start          прод
  *   bun run dev            с автоперезапуском
@@ -335,6 +335,6 @@ const server = serve({
   },
 });
 
-console.log(`ELEMENT by МОСК → http://localhost:${server.port}`);
+console.log(`ELEMENT CONCEPT → http://localhost:${server.port}`);
 console.log(`Заявки: ${join(DATA_DIR, 'leads.txt')}`);
 console.log(`Заказы: ${join(DATA_DIR, 'orders.txt')}`);
