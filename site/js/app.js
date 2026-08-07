@@ -148,38 +148,30 @@ tabs.forEach(function (btn) {
 
 
 /* ─────────────────────────────────────────────────────────
-   6. Блокировка прокрутки
+   6. Блокировка прокрутки под оверлеями
    ───────────────────────────────────────────────────────── */
-var smooth = !reduce && !coarse && innerWidth > 900;
-if (smooth) docEl.classList.add('smooth');
-
 var locked = false, lockY = 0;
 
 function lockScroll() {
   if (locked) return;
   locked = true;
-  if (smooth) { lockY = current; docEl.style.overflow = 'hidden'; }
-  else {
-    lockY = window.scrollY;
-    document.body.style.position = 'fixed';
-    document.body.style.width = '100%';
-    document.body.style.top = -lockY + 'px';
-  }
+  lockY = window.scrollY;
+  document.body.style.position = 'fixed';
+  document.body.style.width = '100%';
+  document.body.style.top = -lockY + 'px';
 }
 
 function unlockScroll() {
   if (!locked) return;
   locked = false;
-  if (smooth) {
-    docEl.style.overflow = '';
-    window.scrollTo(0, lockY);
-    current = target = lockY;
-  } else {
-    document.body.style.position = '';
-    document.body.style.width = '';
-    document.body.style.top = '';
-    window.scrollTo(0, lockY);
-  }
+  document.body.style.position = '';
+  document.body.style.width = '';
+  document.body.style.top = '';
+  /* возвращаемся мгновенно: плавность здесь выглядела бы рывком */
+  var prev = docEl.style.scrollBehavior;
+  docEl.style.scrollBehavior = 'auto';
+  window.scrollTo(0, lockY);
+  docEl.style.scrollBehavior = prev;
 }
 
 
@@ -571,38 +563,9 @@ wireForm('#orderForm', '#orderOk', '/api/order', 'Оставить заявку'
 
 
 /* ─────────────────────────────────────────────────────────
-   11. Курсор, магнитные кнопки, превью вазы
+   11. Магнитные кнопки
    ───────────────────────────────────────────────────────── */
-var cur = $('#cur'), dot = $('.cur__dot', cur), ring = $('.cur__ring', cur);
-var peek = $('#peek'), peekImg = $('img', peek);
-var mouseX = innerWidth / 2, mouseY = innerHeight / 2;
-var curX = mouseX, curY = mouseY, ringX = mouseX, ringY = mouseY, peekX = mouseX, peekY = mouseY;
-
 if (!coarse && !reduce) {
-  docEl.classList.add('has-cur');
-
-  addEventListener('mouseover', function (e) {
-    var view = e.target.closest('[data-view]');
-    var link = e.target.closest('a, button, input');
-    cur.classList.toggle('is-view', !!view);
-    cur.classList.toggle('is-link', !!link && !view);
-  }, {passive: true});
-
-  document.addEventListener('mouseleave', function () { cur.classList.remove('on'); });
-  document.addEventListener('mouseenter', function () { cur.classList.add('on'); });
-
-  $$('.cat__item').forEach(function (row) {
-    var im = $('img', row);
-    if (!im) return;
-    row.addEventListener('mouseenter', function () {
-      peekImg.src = im.getAttribute('src');
-      peekImg.removeAttribute('width');
-      peekImg.removeAttribute('height');
-      peek.classList.add('on');
-    });
-    row.addEventListener('mouseleave', function () { peek.classList.remove('on'); });
-  });
-
   $$('[data-magnet]').forEach(function (el) {
     var mx = 0, my = 0, tx = 0, ty = 0, raf = null;
     function loop() {
@@ -622,17 +585,14 @@ if (!coarse && !reduce) {
   });
 }
 
-addEventListener('mousemove', function (e) {
-  mouseX = e.clientX; mouseY = e.clientY;
-  if (!cur.classList.contains('on')) cur.classList.add('on');
-}, {passive: true});
-
 
 /* ─────────────────────────────────────────────────────────
-   12. Инерционный скролл, параллакс, бегущая строка
+   12. Прогресс чтения, параллакс, бегущая строка
+   Прокрутка нативная: так работают якоря, тачпад и колесо мыши
+   ровно так, как ожидает система.
    ───────────────────────────────────────────────────────── */
-var content = $('#content'), bar = $('#progBar'), tick = $('#tick');
-var current = 0, target = 0, vel = 0, tickX = 0, tickW = 0;
+var bar = $('#progBar'), tick = $('#tick');
+var lastY = 0, vel = 0, tickX = 0, tickW = 0;
 
 var parEls = $$('[data-par]').map(function (el) {
   return {el: el, k: parseFloat(el.getAttribute('data-par')) || 0};
@@ -642,29 +602,19 @@ var innerEls = $$('[data-inner]').map(function (el) {
 });
 
 function sizeBody() {
-  document.body.style.height = smooth ? content.getBoundingClientRect().height + 'px' : '';
   if (tick) tickW = tick.scrollWidth / 2;
 }
 
 function frame() {
-  target = (locked && smooth) ? lockY : (window.scrollY || window.pageYOffset);
+  var y = window.scrollY || window.pageYOffset;
+  vel = y - lastY;
+  lastY = y;
 
-  if (smooth) {
-    var prev = current;
-    current = lerp(current, target, 0.085);
-    if (Math.abs(target - current) < 0.08) current = target;
-    vel = current - prev;
-    content.style.transform = 'translate3d(0,' + (-current).toFixed(2) + 'px,0) skewY(' +
-      clamp(vel * 0.045, -2.4, 2.4).toFixed(3) + 'deg)';
-  } else {
-    current = target; vel = 0;
-  }
+  var h = docEl.scrollHeight - innerHeight;
+  bar.style.transform = 'scaleX(' + (h > 0 ? clamp(y / h, 0, 1) : 0) + ')';
 
-  var h = (smooth ? document.body.scrollHeight : docEl.scrollHeight) - innerHeight;
-  bar.style.transform = 'scaleX(' + (h > 0 ? clamp(current / h, 0, 1) : 0) + ')';
-
-  if (tick && tickW) {
-    tickX -= 0.35 + vel * 0.55;
+  if (tick && tickW && !reduce) {
+    tickX -= 0.35 + clamp(vel, -60, 60) * 0.35;
     if (tickX <= -tickW) tickX += tickW;
     if (tickX > 0) tickX -= tickW;
     tick.style.transform = 'translate3d(' + tickX.toFixed(2) + 'px,0,0)';
@@ -684,15 +634,6 @@ function frame() {
       var prog = (r.top + r.height / 2 - mid) / (innerHeight / 2 + r.height / 2);
       p.el.style.translate = '0 ' + (clamp(prog, -1, 1) * p.k * 100).toFixed(2) + '%';
     });
-  }
-
-  if (!coarse) {
-    curX  = lerp(curX, mouseX, 0.9);   curY  = lerp(curY, mouseY, 0.9);
-    ringX = lerp(ringX, mouseX, 0.16); ringY = lerp(ringY, mouseY, 0.16);
-    peekX = lerp(peekX, mouseX, 0.12); peekY = lerp(peekY, mouseY, 0.12);
-    dot.style.transform  = 'translate3d(' + curX.toFixed(1) + 'px,' + curY.toFixed(1) + 'px,0) translate(-50%,-50%)';
-    ring.style.transform = 'translate3d(' + ringX.toFixed(1) + 'px,' + ringY.toFixed(1) + 'px,0) translate(-50%,-50%)';
-    peek.style.transform = 'translate3d(' + peekX.toFixed(1) + 'px,' + peekY.toFixed(1) + 'px,0)';
   }
 
   requestAnimationFrame(frame);
