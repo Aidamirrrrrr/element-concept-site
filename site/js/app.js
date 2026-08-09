@@ -497,7 +497,8 @@ $$('[data-mask="phone"]').forEach(function (input) {
 });
 
 function fieldError(input, msg) {
-  var box = input.parentElement.querySelector('[data-err]');
+  var box = input.closest('.fld, .agree');
+  box = box ? box.querySelector('[data-err]') : input.parentElement.querySelector('[data-err]');
   input.setAttribute('aria-invalid', msg ? 'true' : 'false');
   if (!box) return;
   box.textContent = msg || '';
@@ -507,6 +508,12 @@ function fieldError(input, msg) {
 function validate(form) {
   var ok = true;
   $$('input[required]', form).forEach(function (input) {
+    if (input.type === 'checkbox') {
+      var need = input.checked ? '' : 'Без согласия отправить не получится';
+      fieldError(input, need);
+      if (need && ok) { ok = false; input.focus(); }
+      return;
+    }
     var v = input.value.trim(), msg = '';
     if (!v) msg = 'Заполните поле';
     else if (input.type === 'tel' && v.replace(/\D/g, '').length !== 11) msg = 'Введите номер полностью';
@@ -539,6 +546,7 @@ function wireForm(formSel, okSel, url, label, extra, after) {
 
   $$('input', form).forEach(function (i) {
     i.addEventListener('input', function () { fieldError(i, ''); });
+    if (i.type === 'checkbox') i.addEventListener('change', function () { fieldError(i, ''); });
   });
 
   form.addEventListener('submit', function (e) {
@@ -547,7 +555,9 @@ function wireForm(formSel, okSel, url, label, extra, after) {
 
     var btn = $('button[type="submit"]', form);
     var data = {};
-    $$('input', form).forEach(function (i) { data[i.name] = i.value.trim(); });
+    $$('input', form).forEach(function (i) {
+      data[i.name] = i.type === 'checkbox' ? i.checked : i.value.trim();
+    });
     if (extra) Object.assign(data, extra());
 
     btn.disabled = true;

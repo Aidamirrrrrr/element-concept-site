@@ -150,6 +150,11 @@ function validName(name: string) {
   return name.length < 2 ? 'Укажите имя' : null;
 }
 
+/** Без согласия по 152-ФЗ заявку принимать нельзя. */
+function validConsent(v: unknown) {
+  return v === true || v === '1' || v === 'on' ? null : 'Нужно согласие на обработку данных';
+}
+
 function validEmail(mail: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(mail) ? null : 'Проверьте адрес почты';
 }
@@ -204,7 +209,8 @@ async function handleLead(req: Request, ip: string) {
 
   const name = clean(body.name, 120);
   const raw = clean(body.phone, 40);
-  const err = validName(name) ?? (normalizePhone(raw) ? null : 'Укажите телефон полностью');
+  const err = validName(name) ?? (normalizePhone(raw) ? null : 'Укажите телефон полностью') ??
+    validConsent(body.consent);
   if (err) return json({ ok: false, error: err }, 422);
   if (rateLimited(ip)) return json({ ok: false, error: 'Слишком много заявок. Попробуйте позже.' }, 429);
   const phone = normalizePhone(raw)!;
@@ -214,7 +220,8 @@ async function handleLead(req: Request, ip: string) {
     `ЗАЯВКА  ${stamp()}\n` +
     `Имя:      ${name}\n` +
     `Телефон:  ${phone}\n` +
-    `Источник: форма «Контакты»\n`;
+    `Источник: форма «Контакты»\n` +
+    `Согласие: получено, ${stamp()}\n`;
 
   await record('leads.txt', block);
   await notify(
@@ -236,7 +243,7 @@ async function handleOrder(req: Request, ip: string) {
   const email = clean(body.email, 160).toLowerCase();
   const city = clean(body.city, 80);
   const err = validName(name) ?? validEmail(email) ??
-    (city.length < 2 ? 'Укажите город доставки' : null);
+    (city.length < 2 ? 'Укажите город доставки' : null) ?? validConsent(body.consent);
   if (err) return json({ ok: false, error: err }, 422);
 
   const items: Item[] = Array.isArray(body.items) ? body.items.slice(0, 50) : [];
@@ -262,7 +269,8 @@ async function handleOrder(req: Request, ip: string) {
     `Город:    ${city}\n` +
     `Состав:\n${lines.join('\n')}\n` +
     `Итого:    ${total.toLocaleString('ru-RU')} ₽\n` +
-    `Оплата:   не проводилась — связаться и согласовать\n`;
+    `Оплата:   не проводилась — связаться и согласовать\n` +
+    `Согласие: получено, ${stamp()}\n`;
 
   await record('orders.txt', block);
   await notify(
