@@ -11,6 +11,7 @@ import { file, serve } from 'bun';
 import { appendFile, mkdir } from 'node:fs/promises';
 import { join, normalize } from 'node:path';
 import { brotliCompressSync, constants, gzipSync } from 'node:zlib';
+import { createHash } from 'node:crypto';
 
 const ROOT = import.meta.dir;
 const PUBLIC_DIR = join(ROOT, 'site');
@@ -47,19 +48,33 @@ const SECURITY_HEADERS: Record<string, string> = {
   'X-Content-Type-Options': 'nosniff',
   'Referrer-Policy': 'strict-origin-when-cross-origin',
   'X-Frame-Options': 'SAMEORIGIN',
-  'Permissions-Policy': 'geolocation=(), microphone=(), camera=(), interest-cohort=()',
-  'Content-Security-Policy': [
+  'Cross-Origin-Opener-Policy': 'same-origin',
+  'Cross-Origin-Resource-Policy': 'same-origin',
+  'Permissions-Policy': 'geolocation=(), microphone=(), camera=(), payment=(), usb=(), interest-cohort=()',
+};
+
+/**
+ * CSP без unsafe-inline. Встроенный <style> разрешаем по хэшу его содержимого,
+ * а инлайновые style="" в разметке запрещены совсем — их там и нет.
+ */
+function buildCsp(styleHash: string) {
+  return [
     "default-src 'self'",
+    "base-uri 'none'",
+    "object-src 'none'",
+    "frame-src 'none'",
+    "frame-ancestors 'self'",
+    "form-action 'self'",
     "img-src 'self' data:",
-    "style-src 'self' 'unsafe-inline'",
-    "script-src 'self'",
     "font-src 'self'",
     "connect-src 'self'",
-    "form-action 'self'",
-    "base-uri 'self'",
-    "frame-ancestors 'self'",
-  ].join('; '),
-};
+    "manifest-src 'self'",
+    "script-src 'self'",
+    styleHash ? `style-src 'self' '${styleHash}'` : "style-src 'self'",
+    "style-src-attr 'none'",
+    'upgrade-insecure-requests',
+  ].join('; ');
+}
 
 /* ─── сжатие текстовых ответов ───────────────────────── */
 
@@ -81,7 +96,7 @@ function compress(bytes: Uint8Array, key: string, br: boolean) {
 }
 
 function withHeaders(res: Response, extra: Record<string, string> = {}) {
-  for (const [k, v] of Object.entries({ ...SECURITY_HEADERS, ...extra })) {
+  for (const [k, v] of Object.entries({ ...SECURITY_HEADERS, 'Content-Security-Policy': csp, ...extra })) {
     res.headers.set(k, v);
   }
   return res;
@@ -151,6 +166,36 @@ async function record(fileName: string, block: string) {
   await appendFile(join(DATA_DIR, fileName), block, 'utf-8');
 }
 
+/* ─── уведомления в Telegram ─────────────────────────── */
+
+const TG_TOKEN = Bun.env.TELEGRAM_BOT_TOKEN ?? '';
+const TG_CHAT = Bun.env.TELEGRAM_CHAT_ID ?? '';
+const TG_READY = Boolean(TG_TOKEN && TG_CHAT);
+
+/**
+ * Шлёт сообщение боту. Отправляем простым текстом, без разметки:
+ * тогда имя или город с любыми символами ничего не сломают.
+ * Если токен не задан — молча пропускаем, заявка всё равно уже в файле.
+ */
+async function notify(text: string) {
+  if (!TG_READY) return;
+  try {
+    const r = await fetch(`https://api.telegram.org/bot${TG_TOKEN}/sendMessage`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        chat_id: TG_CHAT,
+        text,
+        disable_web_page_preview: true,
+      }),
+      signal: AbortSignal.timeout(8000),
+    });
+    if (!r.ok) console.error('Telegram ответил', r.status, await r.text());
+  } catch (e) {
+    console.error('Не удалось отправить в Telegram:', e);
+  }
+}
+
 /* ─── обработчики заявок ─────────────────────────────── */
 
 async function handleLead(req: Request, ip: string) {
@@ -172,6 +217,13 @@ async function handleLead(req: Request, ip: string) {
     `Источник: форма «Контакты»\n`;
 
   await record('leads.txt', block);
+  await notify(
+    `САЙТ · НОВАЯ ЗАЯВКА\n` +
+    `${stamp()}\n\n` +
+    `Имя: ${name}\n` +
+    `Телефон: ${phone}\n\n` +
+    `Форма «Контакты»`,
+  );
   console.log(`[заявка] ${name} · ${phone}`);
   return json({ ok: true });
 }
@@ -181,8 +233,10 @@ async function handleOrder(req: Request, ip: string) {
   if (!body) return json({ ok: false, error: 'Некорректный запрос' }, 400);
 
   const name = clean(body.name, 120);
-  const email = clean(body.email, 160);
-  const err = validName(name) ?? validEmail(email);
+  const email = clean(body.email, 160).toLowerCase();
+  const city = clean(body.city, 80);
+  const err = validName(name) ?? validEmail(email) ??
+    (city.length < 2 ? 'Укажите город доставки' : null);
   if (err) return json({ ok: false, error: err }, 422);
 
   const items: Item[] = Array.isArray(body.items) ? body.items.slice(0, 50) : [];
@@ -205,12 +259,23 @@ async function handleOrder(req: Request, ip: string) {
     `ЗАКАЗ  ${stamp()}\n` +
     `Имя:      ${name}\n` +
     `Email:    ${email}\n` +
+    `Город:    ${city}\n` +
     `Состав:\n${lines.join('\n')}\n` +
     `Итого:    ${total.toLocaleString('ru-RU')} ₽\n` +
     `Оплата:   не проводилась — связаться и согласовать\n`;
 
   await record('orders.txt', block);
-  console.log(`[заказ] ${name} · ${email} · ${total.toLocaleString('ru-RU')} ₽`);
+  await notify(
+    `САЙТ · НОВЫЙ ЗАКАЗ\n` +
+    `${stamp()}\n\n` +
+    `Имя: ${name}\n` +
+    `Email: ${email}\n` +
+    `Город: ${city}\n\n` +
+    `Состав:\n${lines.join('\n')}\n\n` +
+    `Итого: ${total.toLocaleString('ru-RU')} ₽\n` +
+    `Оплата на сайте не проводилась`,
+  );
+  console.log(`[заказ] ${name} · ${email} · ${city} · ${total.toLocaleString('ru-RU')} ₽`);
   return json({ ok: true });
 }
 
@@ -242,6 +307,12 @@ try {
 } catch {
   console.warn('CSS не найден — стили останутся отдельными файлами');
 }
+
+/* Разрешаем встроенный <style> по хэшу его содержимого — так CSP
+   обходится без unsafe-inline, а ответы остаются кэшируемыми. */
+const csp = buildCsp(
+  inlineCss ? 'sha256-' + createHash('sha256').update(inlineCss).digest('base64') : '',
+);
 
 const htmlCache = new Map<string, Uint8Array>();
 
@@ -336,5 +407,10 @@ const server = serve({
 });
 
 console.log(`ELEMENT CONCEPT → http://localhost:${server.port}`);
+console.log(
+  TG_READY
+    ? 'Telegram: уведомления включены'
+    : 'Telegram: выключен — задайте TELEGRAM_BOT_TOKEN и TELEGRAM_CHAT_ID в .env',
+);
 console.log(`Заявки: ${join(DATA_DIR, 'leads.txt')}`);
 console.log(`Заказы: ${join(DATA_DIR, 'orders.txt')}`);

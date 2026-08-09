@@ -59,6 +59,23 @@ section[id]{scroll-margin-top:var(--head-h)}
 .hair{height:1px;background:var(--line);transform:scaleX(0);transform-origin:0 50%;
   transition:transform 1.2s var(--ease-out)}
 .hair.is-in{transform:scaleX(1)}
+.hair--facts{margin-top:clamp(22px,3.2vh,36px)}
+
+/* Задержка каскада задаётся атрибутом, а не style="" —
+   так CSP обходится без unsafe-inline для стилей. */
+[data-i="0"]{--i:0}
+[data-i="1"]{--i:1}
+[data-i="2"]{--i:2}
+[data-i="3"]{--i:3}
+[data-i="4"]{--i:4}
+[data-i="5"]{--i:5}
+[data-i="6"]{--i:6}
+[data-i="7"]{--i:7}
+[data-i="8"]{--i:8}
+[data-i="9"]{--i:9}
+[data-i="10"]{--i:10}
+[data-i="11"]{--i:11}
+[data-i="12"]{--i:12}
 
 /* ─── 4. Прелоадер ──────────────────────────────────────── */
 .loader{position:fixed;inset:0;z-index:var(--z-loader);background:var(--bone);
@@ -237,9 +254,11 @@ main{padding-top:var(--head-h)}
   row-gap:clamp(44px,7.5vh,104px)}
 .svc{grid-column:1/13;display:grid;grid-template-columns:repeat(12,var(--col));gap:inherit;align-items:center}
 .svc__media{grid-column:1/7;position:relative;aspect-ratio:4/3}
-.svc__n{position:absolute;top:-.22em;left:-.05em;z-index:2;font-family:var(--display);font-weight:200;
-  font-size:clamp(62px,7.6vw,128px);line-height:1;color:var(--bone);mix-blend-mode:difference;
-  pointer-events:none;will-change:transform}
+/* Номер лежит внутри кадра: рамка обрезает всё, что вылезает за неё,
+   поэтому запаса сверху быть не должно. */
+.svc__n{position:absolute;top:.04em;left:.06em;z-index:2;font-family:var(--display);font-weight:200;
+  font-size:clamp(54px,6.4vw,104px);line-height:1;color:var(--bone);mix-blend-mode:difference;
+  pointer-events:none}
 .svc__text{grid-column:8/13}
 .svc:nth-child(even) .svc__media{grid-column:7/13;order:2}
 .svc:nth-child(even) .svc__text{grid-column:1/6;order:1}
@@ -317,10 +336,13 @@ main{padding-top:var(--head-h)}
 .ct__form{grid-column:7/13;background:var(--bone);padding:clamp(24px,3vw,44px)}
 .ct__line{display:flex;align-items:center;gap:14px;padding-block:8px}
 .ct__line svg{width:24px;height:24px;flex:none;fill:none;stroke:var(--ink);stroke-width:1.3}
-.ct__line a{font-family:var(--display);font-weight:200;font-size:clamp(22px,2.6vw,36px);
-  line-height:1.2;letter-spacing:-.022em;border-bottom:1px solid var(--line);
-  transition:border-color .35s,color .35s}
+.ct__line svg.ico--fill{fill:var(--ink);stroke:none}
+.ct__line a{font-family:var(--display);font-weight:300;font-size:clamp(22px,2.6vw,36px);
+  line-height:1.2;letter-spacing:.01em;font-variant-numeric:lining-nums tabular-nums;
+  border-bottom:1px solid var(--line);transition:border-color .35s,color .35s}
 .ct__line a:hover{color:var(--red);border-color:var(--red)}
+/* у плюса в антикве широкие боковые пазухи — поджимаем, иначе он «отваливается» */
+.ct__line .plus{margin-right:-.13em}
 .ct__note{font-size:12px;line-height:1.55;color:var(--muted);max-width:42ch;padding-top:22px}
 
 /* ─── 15. Формы ─────────────────────────────────────────── */
@@ -346,7 +368,14 @@ main{padding-top:var(--head-h)}
   text-align:center;margin-top:12px;line-height:1.5}
 .formok.on{display:block;animation:swapIn .5s var(--ease-out) both}
 .formok--err{border-color:var(--red);color:var(--red);text-transform:none;letter-spacing:.02em;font-size:13px}
-.cnote{padding-bottom:14px;text-transform:none;letter-spacing:.02em;font-size:12.5px}
+.cnote{padding-bottom:16px;text-transform:none;letter-spacing:.02em;font-size:12.5px;line-height:1.5}
+.backstep{display:inline-flex;align-items:center;gap:8px;background:none;border:0;cursor:pointer;
+  font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--muted);padding:0 0 16px;transition:color .3s}
+.backstep:hover{color:var(--ink)}
+.backstep span{transition:transform .35s var(--ease-out)}
+.backstep:hover span{transform:translateX(-4px)}
+#orderForm{animation:swapIn .5s var(--ease-out) both}
 
 /* ─── 16. Подвал ────────────────────────────────────────── */
 footer{border-top:1px solid var(--line);padding-block:26px 42px}
@@ -449,7 +478,17 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:10px 36px;justify-content:space-bet
   html{scroll-behavior:auto}
 }
 
-/* ─── 19. Печать ────────────────────────────────────────── */
+/* ─── 19. Страница 404 ──────────────────────────────────── */
+.nf{min-height:100svh;display:grid;place-items:center;padding:var(--gutter);text-align:center}
+  .nf__code{font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--red)}
+  .nf h1{font-family:var(--display);font-weight:200;font-size:clamp(30px,6vw,72px);
+    line-height:1.05;letter-spacing:-.028em;padding:14px 0 16px;text-wrap:balance}
+  .nf p{color:var(--muted);max-width:44ch;margin-inline:auto}
+  .nf a{display:inline-block;margin-top:28px;border:1px solid var(--ink);border-radius:999px;
+    padding:13px 26px;font-size:14px;font-weight:600;transition:background .35s,color .35s}
+  .nf a:hover{background:var(--ink);color:var(--bone)}
+
+/* ─── 20. Печать ────────────────────────────────────────── */
 @media print{
   .top,.prog,.loader,.drawer,.scrim,.modal,.tick{display:none !important}
   body{background:#fff}

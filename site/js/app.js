@@ -44,7 +44,7 @@ var catEl = $('#cat');
 if (catEl) {
   catEl.innerHTML = SITE.products.map(function (p, i) {
     return '' +
-      '<li class="cat__item rv" style="--i:' + i + '">' +
+      '<li class="cat__item rv" data-i="' + i + '">' +
         pic(p.gallery[0], p.title, '(max-width:900px) 64px, 88px', 'cat__img') +
         '<span class="cat__name">' + esc(p.title) + '</span>' +
         '<span class="cat__descr">' + esc(p.descr) + '</span>' +
@@ -184,7 +184,20 @@ try { cart = JSON.parse(localStorage.getItem(STORE_KEY)) || {}; } catch (e) { ca
 
 var cartEl = $('#cart'), cartBody = $('#cartBody'), cartFoot = $('#cartFoot');
 var cartTotal = $('#cartTotal'), cartBtn = $('#cartBtn'), cartCount = $('#cartCount');
+var cartStep1 = $('#cartStep1'), orderForm = $('#orderForm');
 var scrim = $('#scrim');
+
+/** Корзина показывается в два шага: сначала состав, потом форма заявки. */
+function cartStep(n) {
+  cartStep1.hidden = n !== 1;
+  orderForm.hidden = n !== 2;
+  if (n === 2) {
+    orderForm.classList.remove('swap');
+    void orderForm.offsetWidth;
+    var first = $('input', orderForm);
+    if (first) first.focus({preventScroll: true});
+  }
+}
 
 function saveCart() {
   try { localStorage.setItem(STORE_KEY, JSON.stringify(cart)); } catch (e) {}
@@ -211,6 +224,7 @@ function renderCart() {
   if (!slugs.length) {
     cartBody.innerHTML = '<p class="cempty">Корзина пуста.<br>Выберите вазу из коллекции.</p>';
     cartFoot.hidden = true;
+    cartStep(1);
     return;
   }
 
@@ -260,6 +274,7 @@ cartBody.addEventListener('click', function (e) {
 });
 
 function openCart() {
+  cartStep(1);
   cartEl.classList.add('on');
   cartEl.removeAttribute('inert');
   cartEl.setAttribute('aria-hidden', 'false');
@@ -277,6 +292,8 @@ function closeCart() {
 }
 
 cartBtn.addEventListener('click', openCart);
+$('#toCheckout').addEventListener('click', function () { cartStep(2); });
+$('#backToCart').addEventListener('click', function () { cartStep(1); });
 renderCart();
 
 
@@ -457,6 +474,20 @@ function maskPhone(value) {
   return out;
 }
 
+/* Почту «маской» не разметить, но мусорный ввод убрать можно:
+   пробелы, кириллицу и верхний регистр адрес не переживёт. */
+$$('[data-mask="email"]').forEach(function (input) {
+  input.addEventListener('input', function () {
+    var clean = input.value.replace(/[^\x21-\x7E]/g, '').replace(/[^A-Za-z0-9@._+\-]/g, '').toLowerCase();
+    if (clean !== input.value) {
+      var pos = input.selectionStart - (input.value.length - clean.length);
+      input.value = clean;
+      try { input.setSelectionRange(pos, pos); } catch (e) {}
+    }
+  });
+  input.addEventListener('blur', function () { input.value = input.value.trim(); });
+});
+
 $$('[data-mask="phone"]').forEach(function (input) {
   input.addEventListener('focus', function () { if (!input.value) input.value = '+7 ('; });
   input.addEventListener('input', function () { input.value = maskPhone(input.value); });
@@ -479,7 +510,8 @@ function validate(form) {
     var v = input.value.trim(), msg = '';
     if (!v) msg = 'Заполните поле';
     else if (input.type === 'tel' && v.replace(/\D/g, '').length !== 11) msg = 'Введите номер полностью';
-    else if (input.type === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)) msg = 'Проверьте адрес почты';
+    else if (input.type === 'email' && !/^[a-z0-9._+-]+@[a-z0-9-]+(\.[a-z0-9-]+)*\.[a-z]{2,}$/.test(v.toLowerCase()))
+      msg = v.indexOf('@') < 0 ? 'В адресе нет знака @' : 'Проверьте адрес почты';
     fieldError(input, msg);
     if (msg && ok) { ok = false; input.focus(); }
   });
@@ -559,6 +591,7 @@ wireForm('#orderForm', '#orderOk', '/api/order', 'Оставить заявку'
   cart = {};
   saveCart();
   renderCart();
+  cartStep(1);
 });
 
 
