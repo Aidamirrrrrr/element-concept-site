@@ -26,6 +26,10 @@ SITE.products.forEach(function (p) { bySlug[p.slug] = p; });
 SITE.cases.forEach(function (c) { caseBySlug[c.slug] = c; });
 (SITE.services || []).forEach(function (s) { svcById[s.id] = s; });
 
+/* В магазине сначала показываем предметы, затем сценарии работы с цветами. */
+var main = $('main'), vasesSection = $('#vases'), servicesSection = $('#services');
+if (main && vasesSection && servicesSection) main.insertBefore(vasesSection, servicesSection);
+
 /* адаптивная картинка из дескриптора сборщика */
 function pic(d, alt, sizes, cls) {
   if (!d) return '';
@@ -79,7 +83,7 @@ $$('[data-words]').forEach(function (el) {
 /* ─────────────────────────────────────────────────────────
    3. Появление при входе в кадр
    ───────────────────────────────────────────────────────── */
-var REVEAL = '.rv, .imgrv, .hair, [data-lines], [data-words]';
+var REVEAL = '.rv, .imgrv, .hair, [data-lines], [data-words], .cat__item, .w, .svc';
 if (reduce || !('IntersectionObserver' in window)) {
   $$(REVEAL).forEach(function (el) { el.classList.add('is-in'); });
 } else {
@@ -89,6 +93,29 @@ if (reduce || !('IntersectionObserver' in window)) {
     });
   }, {rootMargin: '0px 0px -8% 0px', threshold: 0.04});
   $$(REVEAL).forEach(function (el) { io.observe(el); });
+}
+
+/* Шапка получает отдельное состояние после первого экрана; секции — общий
+   мягкий вход, чтобы анимация ощущалась частью ритма, а не набором эффектов. */
+var topbar = $('.top');
+function headerState() {
+  if (topbar) topbar.classList.toggle('is-scrolled', window.scrollY > 24);
+}
+headerState();
+window.addEventListener('scroll', headerState, {passive: true});
+
+if (!reduce && 'IntersectionObserver' in window) {
+  var sectionIO = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('section-in');
+        sectionIO.unobserve(entry.target);
+      }
+    });
+  }, {rootMargin: '0px 0px -12% 0px', threshold: 0.08});
+  $$('.sec').forEach(function (section) { sectionIO.observe(section); });
+} else {
+  $$('.sec').forEach(function (section) { section.classList.add('section-in'); });
 }
 
 
@@ -139,7 +166,7 @@ tabs.forEach(function (btn) {
       var on = p.getAttribute('data-tabpanel') === btn.getAttribute('data-panel');
       p.hidden = !on;
       if (!on) return;
-      $$('.rv, .imgrv', p).forEach(function (el) { el.classList.add('is-in'); });
+      $$('.rv, .imgrv, .svc', p).forEach(function (el) { el.classList.add('is-in'); });
       if (reduce) return;
       p.classList.remove('swap'); void p.offsetWidth; p.classList.add('swap');
     });
@@ -184,20 +211,8 @@ try { cart = JSON.parse(localStorage.getItem(STORE_KEY)) || {}; } catch (e) { ca
 
 var cartEl = $('#cart'), cartBody = $('#cartBody'), cartFoot = $('#cartFoot');
 var cartTotal = $('#cartTotal'), cartBtn = $('#cartBtn'), cartCount = $('#cartCount');
-var cartStep1 = $('#cartStep1'), orderForm = $('#orderForm');
+var orderForm = $('#orderForm');
 var scrim = $('#scrim');
-
-/** Корзина показывается в два шага: сначала состав, потом форма заявки. */
-function cartStep(n) {
-  cartStep1.hidden = n !== 1;
-  orderForm.hidden = n !== 2;
-  if (n === 2) {
-    orderForm.classList.remove('swap');
-    void orderForm.offsetWidth;
-    var first = $('input', orderForm);
-    if (first) first.focus({preventScroll: true});
-  }
-}
 
 function saveCart() {
   try { localStorage.setItem(STORE_KEY, JSON.stringify(cart)); } catch (e) {}
@@ -214,6 +229,24 @@ function cartTotals() {
   return {count: n, sum: sum};
 }
 
+function cartRow(p, slug, q) {
+  return '' +
+    '<div class="citem" data-slug="' + slug + '">' +
+      pic(p.gallery[0], p.title, '64px') +
+      '<div>' +
+        '<div class="citem__n">' + esc(p.title) + '</div>' +
+        '<div class="citem__p"></div>' +
+        '<div class="qty">' +
+          '<button type="button" data-q="-1" aria-label="Убрать одну">−</button>' +
+          '<span>' + q + '</span>' +
+          '<button type="button" data-q="1" aria-label="Добавить одну">+</button>' +
+        '</div>' +
+      '</div>' +
+      '<button class="citem__del" type="button" data-del aria-label="Удалить ' + esc(p.title) + '">Удалить</button>' +
+    '</div>';
+}
+
+/** Сверяет DOM с корзиной: существующие строки не пересоздаются. */
 function renderCart() {
   var t = cartTotals();
   cartCount.textContent = t.count;
@@ -222,30 +255,29 @@ function renderCart() {
 
   var slugs = Object.keys(cart).filter(function (s) { return bySlug[s]; });
   if (!slugs.length) {
-    cartBody.innerHTML = '<p class="cempty">Корзина пуста.<br>Выберите вазу из коллекции.</p>';
+    if (!cartBody.querySelector('.cempty')) {
+      cartBody.innerHTML = '<p class="cempty">Корзина пуста.<br>Выберите объект из коллекции.</p>';
+    }
     cartFoot.hidden = true;
-    cartStep(1);
     return;
   }
 
   cartFoot.hidden = false;
-  cartBody.innerHTML = slugs.map(function (slug) {
+  var empty = cartBody.querySelector('.cempty');
+  if (empty) empty.remove();
+  $$('.citem', cartBody).forEach(function (row) {
+    if (!cart[row.getAttribute('data-slug')]) row.remove();
+  });
+  slugs.forEach(function (slug) {
     var p = bySlug[slug], q = cart[slug];
-    return '' +
-      '<div class="citem" data-slug="' + slug + '">' +
-        pic(p.gallery[0], p.title, '64px') +
-        '<div>' +
-          '<div class="citem__n">' + esc(p.title) + '</div>' +
-          '<div class="citem__p">' + money(p.price) + ' × ' + q + ' = ' + money(p.price * q) + '</div>' +
-          '<div class="qty">' +
-            '<button type="button" data-q="-1" aria-label="Убрать одну">−</button>' +
-            '<span>' + q + '</span>' +
-            '<button type="button" data-q="1" aria-label="Добавить одну">+</button>' +
-          '</div>' +
-        '</div>' +
-        '<button class="citem__del" type="button" data-del aria-label="Удалить ' + esc(p.title) + '">Удалить</button>' +
-      '</div>';
-  }).join('');
+    var row = cartBody.querySelector('.citem[data-slug="' + slug + '"]');
+    if (!row) {
+      cartBody.insertAdjacentHTML('beforeend', cartRow(p, slug, q));
+      row = cartBody.querySelector('.citem[data-slug="' + slug + '"]');
+    }
+    $('.qty span', row).textContent = q;
+    $('.citem__p', row).textContent = money(p.price) + ' · ' + money(p.price * q);
+  });
 
   cartTotal.textContent = money(t.sum);
 }
@@ -274,7 +306,6 @@ cartBody.addEventListener('click', function (e) {
 });
 
 function openCart() {
-  cartStep(1);
   cartEl.classList.add('on');
   cartEl.removeAttribute('inert');
   cartEl.setAttribute('aria-hidden', 'false');
@@ -292,8 +323,6 @@ function closeCart() {
 }
 
 cartBtn.addEventListener('click', openCart);
-$('#toCheckout').addEventListener('click', function () { cartStep(2); });
-$('#backToCart').addEventListener('click', function () { cartStep(1); });
 renderCart();
 
 
@@ -420,6 +449,11 @@ document.addEventListener('click', function (e) {
 });
 
 scrim.addEventListener('click', function () { hideModal(); closeCart(); });
+$$('.modal').forEach(function (modal) {
+  modal.addEventListener('click', function (e) {
+    if (e.target === modal) hideModal();
+  });
+});
 
 document.addEventListener('keydown', function (e) {
   if (e.key === 'Escape') { hideModal(); closeCart(); closeNav(); return; }
@@ -569,7 +603,11 @@ function wireForm(formSel, okSel, url, label, extra, after) {
         })
       : send(url, data);
 
-    request.then(function () {
+    request.then(function (result) {
+      if (result && result.confirmationUrl) {
+        window.location.assign(result.confirmationUrl);
+        return;
+      }
       form.reset();
       ok.textContent = ok.getAttribute('data-ok') || ok.textContent;
       ok.classList.remove('formok--err');
@@ -592,7 +630,7 @@ function wireForm(formSel, okSel, url, label, extra, after) {
 $$('.formok').forEach(function (el) { el.setAttribute('data-ok', el.textContent.trim()); });
 
 wireForm('#leadForm', '#leadOk', '/api/lead', 'Отправить');
-wireForm('#orderForm', '#orderOk', '/api/order', 'Оставить заявку', function () {
+wireForm('#orderForm', '#orderOk', '/api/order', 'Оформить и перейти к оплате', function () {
   var items = Object.keys(cart).filter(function (s) { return bySlug[s]; }).map(function (s) {
     return {slug: s, title: bySlug[s].title, price: bySlug[s].price, qty: cart[s]};
   });
@@ -601,7 +639,6 @@ wireForm('#orderForm', '#orderOk', '/api/order', 'Оставить заявку'
   cart = {};
   saveCart();
   renderCart();
-  cartStep(1);
 });
 
 

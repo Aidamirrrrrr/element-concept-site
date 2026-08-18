@@ -17,6 +17,20 @@ const ROOT = import.meta.dir;
 const PUBLIC_DIR = join(ROOT, 'site');
 const DATA_DIR = join(ROOT, 'data');
 const PORT = Number(Bun.env.PORT ?? 3000);
+const YOOKASSA_SHOP_ID = Bun.env.YOOKASSA_SHOP_ID ?? '';
+const YOOKASSA_SECRET_KEY = Bun.env.YOOKASSA_SECRET_KEY ?? '';
+const YOOKASSA_READY = Boolean(YOOKASSA_SHOP_ID && YOOKASSA_SECRET_KEY);
+const SITE_URL = (Bun.env.SITE_URL ?? 'https://elementconcept.ru').replace(/\/$/, '');
+
+/* Цена никогда не принимается из браузера: это серверный источник истины. */
+const PRODUCT_PRICES: Record<string, { title: string; price: number }> = {
+  'stone-bowl': { title: 'Stone Bowl', price: 28000 },
+  'linen-trace': { title: 'Linen Trace', price: 28000 },
+  'clay-ember': { title: 'Clay Ember', price: 28000 },
+  'shadow-clay': { title: 'Shadow Clay', price: 28000 },
+  'frost-vessel': { title: 'Frost Vessel', price: 28000 },
+  'sand-form': { title: 'Sand Form', price: 28000 },
+};
 
 await mkdir(DATA_DIR, { recursive: true });
 
@@ -204,7 +218,7 @@ async function notify(text: string) {
 /* ─── обработчики заявок ─────────────────────────────── */
 
 async function handleLead(req: Request, ip: string) {
-  const body = await req.json().catch(() => null);
+  const body: any = await req.json().catch(() => null);
   if (!body) return json({ ok: false, error: 'Некорректный запрос' }, 400);
 
   const name = clean(body.name, 120);
@@ -236,7 +250,7 @@ async function handleLead(req: Request, ip: string) {
 }
 
 async function handleOrder(req: Request, ip: string) {
-  const body = await req.json().catch(() => null);
+  const body: any = await req.json().catch(() => null);
   if (!body) return json({ ok: false, error: 'Некорректный запрос' }, 400);
 
   const name = clean(body.name, 120);
@@ -246,8 +260,20 @@ async function handleOrder(req: Request, ip: string) {
     (city.length < 2 ? 'Укажите город доставки' : null) ?? validConsent(body.consent);
   if (err) return json({ ok: false, error: err }, 422);
 
-  const items: Item[] = Array.isArray(body.items) ? body.items.slice(0, 50) : [];
-  if (!items.length) return json({ ok: false, error: 'Корзина пуста' }, 422);
+  const rawItems: Item[] = Array.isArray(body.items) ? body.items.slice(0, 50) : [];
+  const items = rawItems.flatMap((it) => {
+    const product = PRODUCT_PRICES[clean(it.slug, 80)];
+    if (!product) return [];
+    return [{
+      slug: clean(it.slug, 80),
+      title: product.title,
+      price: product.price,
+      qty: Math.max(1, Math.min(99, Math.floor(Number(it.qty) || 1))),
+    }];
+  });
+  if (!items.length || items.length !== rawItems.length) {
+    return json({ ok: false, error: 'Состав корзины изменился. Обновите страницу.' }, 422);
+  }
   if (rateLimited(ip)) return json({ ok: false, error: 'Слишком много заявок. Попробуйте позже.' }, 429);
 
   const lines = items.map((it) => {
@@ -261,6 +287,34 @@ async function handleOrder(req: Request, ip: string) {
     0,
   );
 
+  let payment: { id?: string; confirmation?: { confirmation_url?: string } } | null = null;
+  if (YOOKASSA_READY) {
+    const paymentResponse = await fetch('https://api.yookassa.ru/v3/payments', {
+      method: 'POST',
+      headers: {
+        Authorization: `Basic ${btoa(`${YOOKASSA_SHOP_ID}:${YOOKASSA_SECRET_KEY}`)}`,
+        'Idempotence-Key': crypto.randomUUID(),
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        amount: { value: total.toFixed(2), currency: 'RUB' },
+        capture: true,
+        confirmation: { type: 'redirect', return_url: `${SITE_URL}/?payment=return` },
+        description: `ELEMENT CONCEPT · ${items.reduce((n, it) => n + it.qty, 0)} шт.`,
+        metadata: { customer_email: email },
+      }),
+      signal: AbortSignal.timeout(12_000),
+    });
+    if (!paymentResponse.ok) {
+      console.error('ЮKassa ответила', paymentResponse.status, await paymentResponse.text());
+      return json({ ok: false, error: 'Не удалось создать платёж. Попробуйте ещё раз.' }, 502);
+    }
+    payment = await paymentResponse.json() as { id?: string; confirmation?: { confirmation_url?: string } };
+    if (!payment?.confirmation?.confirmation_url) {
+      return json({ ok: false, error: 'ЮKassa не вернула ссылку на оплату.' }, 502);
+    }
+  }
+
   const block =
     `\n──────────────────────────────────────────\n` +
     `ЗАКАЗ  ${stamp()}\n` +
@@ -269,7 +323,7 @@ async function handleOrder(req: Request, ip: string) {
     `Город:    ${city}\n` +
     `Состав:\n${lines.join('\n')}\n` +
     `Итого:    ${total.toLocaleString('ru-RU')} ₽\n` +
-    `Оплата:   не проводилась — связаться и согласовать\n` +
+    `Оплата:   ${payment?.id ? `ЮKassa, ожидается · ${payment.id}` : 'не проводилась — связаться и согласовать'}\n` +
     `Согласие: получено, ${stamp()}\n`;
 
   await record('orders.txt', block);
@@ -281,9 +335,37 @@ async function handleOrder(req: Request, ip: string) {
     `Город: ${city}\n\n` +
     `Состав:\n${lines.join('\n')}\n\n` +
     `Итого: ${total.toLocaleString('ru-RU')} ₽\n` +
-    `Оплата на сайте не проводилась`,
+    (payment?.id ? `Платёж ЮKassa создан: ${payment.id}` : `Оплата на сайте не проводилась`),
   );
   console.log(`[заказ] ${name} · ${email} · ${city} · ${total.toLocaleString('ru-RU')} ₽`);
+  return json({ ok: true, confirmationUrl: payment?.confirmation?.confirmation_url ?? null });
+}
+
+/** Уведомление не считаем доказательством оплаты: повторно читаем платёж из ЮKassa. */
+async function handleYookassaWebhook(req: Request) {
+  if (!YOOKASSA_READY) return json({ ok: false }, 503);
+  const notice: any = await req.json().catch(() => null);
+  const paymentId = clean(notice?.object?.id, 80);
+  if (!paymentId) return json({ ok: false }, 400);
+
+  const check = await fetch(`https://api.yookassa.ru/v3/payments/${encodeURIComponent(paymentId)}`, {
+    headers: { Authorization: `Basic ${btoa(`${YOOKASSA_SHOP_ID}:${YOOKASSA_SECRET_KEY}`)}` },
+    signal: AbortSignal.timeout(12_000),
+  });
+  if (!check.ok) return json({ ok: false }, 502);
+  const verified: any = await check.json();
+  if (verified.id !== paymentId) return json({ ok: false }, 400);
+
+  if (verified.status === 'succeeded' && verified.paid === true) {
+    await record('payments.txt',
+      `\n──────────────────────────────────────────\n` +
+      `ОПЛАТА  ${stamp()}\n` +
+      `ЮKassa ID: ${paymentId}\n` +
+      `Сумма:     ${clean(verified.amount?.value, 30)} RUB\n` +
+      `Статус:    succeeded\n`,
+    );
+    await notify(`САЙТ · ОПЛАТА ПОЛУЧЕНА\n${stamp()}\n\nЮKassa ID: ${paymentId}\nСумма: ${clean(verified.amount?.value, 30)} ₽`);
+  }
   return json({ ok: true });
 }
 
@@ -388,6 +470,11 @@ const server = serve({
     const url = new URL(req.url);
     const ip = srv.requestIP(req)?.address ?? 'unknown';
 
+    if (url.pathname === '/api/yookassa/webhook') {
+      if (req.method !== 'POST') return json({ ok: false, error: 'Только POST' }, 405);
+      return handleYookassaWebhook(req);
+    }
+
     if (url.pathname === '/api/lead' || url.pathname === '/api/order') {
       if (req.method !== 'POST') return json({ ok: false, error: 'Только POST' }, 405);
       try {
@@ -420,5 +507,6 @@ console.log(
     ? 'Telegram: уведомления включены'
     : 'Telegram: выключен — задайте TELEGRAM_BOT_TOKEN и TELEGRAM_CHAT_ID в .env',
 );
+console.log(YOOKASSA_READY ? 'ЮKassa: включена' : 'ЮKassa: выключена — заказ сохраняется как заявка');
 console.log(`Заявки: ${join(DATA_DIR, 'leads.txt')}`);
 console.log(`Заказы: ${join(DATA_DIR, 'orders.txt')}`);

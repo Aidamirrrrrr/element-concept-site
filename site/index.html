@@ -309,15 +309,13 @@
     <a class="top__mark" href="#hero" aria-label="ELEMENT CONCEPT, на главную">Element Concept</a>
 
     <nav class="top__nav" aria-label="Разделы сайта">
-      <a href="#studio">О нас</a>
-      <a href="#services">Услуги</a>
-      <a href="#vases">Вазы</a>
-      <a href="#works">Кейсы</a>
-      <a href="#contact">Контакты</a>
+      <a href="#services">Цветы</a>
+      <a href="#vases">Элементы</a>
+      <a href="#works">Сет-дизайн</a>
     </nav>
 
     <div class="top__act">
-      <a class="top__cta" href="#contact" data-magnet>Оставить заявку</a>
+      <a class="top__cta" href="#contact" data-magnet>Связаться</a>
 
       <button class="cartbtn" id="cartBtn" type="button" aria-label="Корзина, товаров: 0">
         <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
@@ -335,12 +333,11 @@
 </header>
 
 <nav class="mnav" id="mnav" aria-label="Меню" inert>
-  <a href="#studio">О нас</a>
-  <a href="#services">Услуги</a>
-  <a href="#vases">Вазы</a>
-  <a href="#works">Кейсы</a>
+  <a href="#services">Цветы</a>
+  <a href="#vases">Элементы</a>
+  <a href="#works">Сет-дизайн</a>
   <a href="#contact">Контакты</a>
-  <a class="top__cta" href="#contact">Оставить заявку</a>
+  <a class="top__cta" href="#contact">Связаться</a>
 </nav>
 
 <main>
@@ -381,10 +378,10 @@
     <div class="hero__art">
       <figure class="a imgrv" data-i="3" data-par="-.045">
         <picture>
-          <source type="image/webp" srcset="img/hero-main-480.webp 480w, img/hero-main-960.webp 960w"
-                  sizes="(max-width:900px) 100vw, (max-width:1500px) 40vw, 600px">
-          <img src="img/hero-main.jpg" alt="Пионы и садовые цветы в каменной вазе на светлой стойке ресепшена"
-               width="960" height="1280" data-inner=".07" fetchpriority="high" decoding="async">
+          <source type="image/webp" srcset="img/case-home-set-design-06-480.webp 480w, img/case-home-set-design-06-960.webp 960w, img/case-home-set-design-06-1440.webp 1440w"
+                  sizes="100vw">
+          <img src="img/case-home-set-design-06.jpg" alt="Флористическая композиция и сервировка в пространстве частного дома"
+               width="1680" height="1120" data-inner=".07" fetchpriority="high" decoding="async">
         </picture>
       </figure>
       <figure class="b imgrv" data-i="6" data-par=".075">
@@ -395,6 +392,19 @@
                width="700" height="1050" data-inner=".05" loading="lazy" decoding="async">
         </picture>
       </figure>
+    </div>
+
+    <div class="hero__overlay">
+      <p class="hero__eyebrow">Студия флористики и сет-дизайна · Москва</p>
+      <h1 class="hero__wordmark">Element</h1>
+      <div class="hero__bottom">
+        <p>Цветы, объекты и пространства<br>как единая композиция</p>
+        <nav aria-label="Направления">
+          <a href="#vases"><span>01</span> Элементы</a>
+          <a href="#services"><span>02</span> Цветы</a>
+          <a href="#works"><span>03</span> Сет-дизайн</a>
+        </nav>
+      </div>
     </div>
   </div>
 </section>
@@ -450,8 +460,8 @@
   <div class="wrap g12">
     <div class="shead">
       <div class="shead__l">
-        <p class="mono mono--red rv">Услуги</p>
-        <h2 id="servicesTitle" data-words>Четыре формата работы — от одной композиции до сопровождения события целиком</h2>
+        <p class="mono mono--red rv">Цветы</p>
+        <h2 id="servicesTitle" data-words>Цветы для дома, события и пространства</h2>
       </div>
       <p class="shead__r mono rv" data-i="1">Частным клиентам<br>Для бизнеса</p>
     </div>
@@ -547,8 +557,8 @@
   <div class="wrap g12">
     <div class="shead">
       <div class="shead__l">
-        <p class="mono mono--red rv">Вазы</p>
-        <h2 id="vasesTitle" data-words>Керамические вазы ручной работы</h2>
+        <p class="mono mono--red rv">Элементы</p>
+        <h2 id="vasesTitle" data-words>Объекты ручной работы</h2>
       </div>
       <p class="shead__r mono rv" data-i="1">6 форм · 28 000 ₽</p>
     </div>
@@ -562,10 +572,10 @@
   <div class="wrap g12">
     <div class="shead">
       <div class="shead__l">
-        <p class="mono mono--red rv">Кейсы</p>
-        <h2 id="worksTitle" data-words>Пять событий, где флористика была частью замысла</h2>
+        <p class="mono mono--red rv">Сет-дизайн</p>
+        <h2 id="worksTitle" data-words>Пространства как цельная композиция</h2>
       </div>
-      <p class="shead__r mono rv" data-i="1">2025</p>
+      <p class="shead__r mono rv" data-i="1">Частные события<br>Бренды и пространства<br>2023—2026</p>
     </div>
 
     <div class="works">
@@ -715,14 +725,6 @@
       <span>Москва</span>
       <span>© 2026</span>
     </div>
-
-    <div class="foot__row foot__legal mono">
-      <span data-todo="реквизиты">ИП Фамилия Имя Отчество · ОГРНИП 000000000000000 · ИНН 000000000000</span>
-      <nav aria-label="Правовые документы">
-        <a href="policy.html">Политика обработки персональных данных</a>
-        <a href="terms.html">Условия заказа и доставки</a>
-      </nav>
-    </div>
   </div>
 </footer>
 
@@ -743,16 +745,10 @@
   <div class="drawer__ft" id="cartFoot" hidden>
     <p class="ctotal"><span class="mono">Итоговая сумма</span><b id="cartTotal">0 ₽</b></p>
 
-    <div id="cartStep1">
-      <p class="mono cnote">Оплаты на сайте нет. Оставьте заявку — свяжемся и согласуем
-      доставку и оплату.</p>
-      <button class="btn" type="button" id="toCheckout">Оформить заказ</button>
-    </div>
+    <p class="mono cnote">Доставка согласовывается после оформления. Оплата проходит
+    на защищённой странице ЮKassa.</p>
 
-    <form id="orderForm" novalidate hidden>
-      <button class="backstep" type="button" id="backToCart">
-        <span aria-hidden="true">←</span> Вернуться к заказу
-      </button>
+    <form id="orderForm" novalidate>
       <div class="fld">
         <label class="mono" for="orderName">Имя</label>
         <input id="orderName" type="text" name="name" autocomplete="name" placeholder="Как к вам обращаться" required>
@@ -776,8 +772,8 @@
         <a href="policy.html" target="_blank" rel="noopener">политику обработки персональных данных</a></span>
         <span class="fld__err" data-err role="alert"></span>
       </label>
-      <button class="btn" type="submit">Отправить заявку</button>
-      <p class="formok" id="orderOk" role="status">Заявка принята — свяжемся с вами</p>
+      <button class="btn" type="submit">Оформить и перейти к оплате</button>
+      <p class="formok" id="orderOk" role="status">Заказ создан</p>
     </form>
   </div>
 </aside>
