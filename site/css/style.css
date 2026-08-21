@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════════════
-   ELEMENT CONCEPT — студия флористики и сет-дизайна
+   ELEMENT CONCEPT — студия интерьерной флористики и декора
    Направление: «Архив» × «Композиция»
    ═══════════════════════════════════════════════════════════ */
 
@@ -2624,7 +2624,7 @@ main {
 
 .cat {
   display: grid;
-  grid-template-columns: repeat(12, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   gap: clamp(36px, 7vw, 120px) clamp(12px, 2vw, 32px)
 }
 
@@ -2678,21 +2678,10 @@ main {
   transition-delay: .18s
 }
 
-.cat__item:nth-child(6n+1),
-.cat__item:nth-child(6n+4) {
-  grid-column: span 5
-}
-
-.cat__item:nth-child(6n+2),
-.cat__item:nth-child(6n+5) {
-  grid-column: span 3;
-  align-self: center
-}
-
-.cat__item:nth-child(6n+3),
-.cat__item:nth-child(6n+6) {
-  grid-column: span 4;
-  margin-top: clamp(55px, 9vw, 140px)
+.cat__item {
+  grid-column: span 1;
+  align-self: start;
+  margin-top: 0
 }
 
 .cat__item::before {

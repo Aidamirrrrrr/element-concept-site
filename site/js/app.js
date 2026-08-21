@@ -23,16 +23,17 @@ var esc = function (s) {
 
 var bySlug = {}, caseBySlug = {}, svcById = {};
 SITE.products.forEach(function (p) { bySlug[p.slug] = p; });
+(SITE.bouquets || []).forEach(function (p) { bySlug[p.slug] = p; });
 SITE.cases.forEach(function (c) { caseBySlug[c.slug] = c; });
 (SITE.services || []).forEach(function (s) { svcById[s.id] = s; });
-
-/* В магазине сначала показываем предметы, затем сценарии работы с цветами. */
-var main = $('main'), vasesSection = $('#vases'), servicesSection = $('#services');
-if (main && vasesSection && servicesSection) main.insertBefore(vasesSection, servicesSection);
 
 /* адаптивная картинка из дескриптора сборщика */
 function pic(d, alt, sizes, cls) {
   if (!d) return '';
+  if (typeof d === 'string') {
+    return '<img src="' + d + '" alt="' + esc(alt) + '"' +
+           (cls ? ' class="' + cls + '"' : '') + ' loading="lazy" decoding="async">';
+  }
   if (d.ext === 'svg') return '<img src="' + d.b + '.svg" alt="' + esc(alt) + '">';
   var ss = d.ws.map(function (w) { return d.b + '-' + w + '.webp ' + w + 'w'; }).join(', ');
   return '<picture><source type="image/webp" srcset="' + ss + '" sizes="' + sizes + '">' +
@@ -59,6 +60,27 @@ if (catEl) {
       '</li>';
   }).join('') +
   '<li class="cat__foot mono"><span>Керамика · ручная работа</span><span>Доставка по Москве</span></li>';
+}
+
+
+/* ─────────────────────────────────────────────────────────
+   1a. Каталог букетов
+   ───────────────────────────────────────────────────────── */
+var bouquetsEl = $('#catBouquets');
+if (bouquetsEl) {
+  bouquetsEl.innerHTML = (SITE.bouquets || []).map(function (p, i) {
+    return '' +
+      '<li class="cat__item rv" data-i="' + i + '">' +
+        pic(p.gallery[0], p.title, '(max-width:900px) 64px, 88px', 'cat__img') +
+        '<span class="cat__name">' + esc(p.title) + '</span>' +
+        '<span class="cat__descr">' + esc(p.descr) + '</span>' +
+        '<span class="cat__price">' + money(p.price) + '</span>' +
+        '<button class="cat__add" type="button" data-add="' + p.slug + '">В корзину</button>' +
+        '<button class="cat__open" type="button" data-product="' + p.slug + '" data-view ' +
+                'aria-label="Подробнее: ' + esc(p.title) + '"></button>' +
+      '</li>';
+  }).join('') +
+  '<li class="cat__foot mono"><span>Живые цветы · свежая сборка</span><span>Доставка по Москве</span></li>';
 }
 
 
