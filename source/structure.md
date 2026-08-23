@@ -58,4 +58,4 @@ Tilda-стандарт, вёрстка задана отдельно для ка
 ## Внешние ссылки
 
 - WhatsApp: `https://wa.me/79167468668`
-- Instagram: `https://www.instagram.com/elementbymosk`
+- Instagram: `https://www.instagram.com/element.concept`

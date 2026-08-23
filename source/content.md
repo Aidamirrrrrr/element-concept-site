@@ -139,7 +139,7 @@
 **Контакты**
 
 - +7 916 746 86 68 → `https://wa.me/79167468668` (иконка WhatsApp)
-- elementbymosk* → `https://www.instagram.com/elementbymosk` (иконка Instagram)
+- element.concept* → `https://www.instagram.com/element.concept` (иконка Instagram)
 
 > *Instagram (продукт компании Meta, признанной экстремистской организацией в России и
 > запрещённой на территории РФ)

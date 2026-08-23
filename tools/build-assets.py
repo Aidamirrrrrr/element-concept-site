@@ -163,8 +163,8 @@ DATA = {
         'phone': '+7 916 746 86 68',
         'phoneRaw': '79167468668',
         'whatsapp': 'https://wa.me/79167468668',
-        'instagram': 'https://www.instagram.com/elementbymosk',
-        'instagramHandle': 'elementbymosk',
+        'instagram': 'https://www.instagram.com/element.concept',
+        'instagramHandle': 'element.concept',
         'disclaimer': '*Instagram (продукт компании Meta, признанной экстремистской '
                       'организацией в России и запрещённой на территории РФ)',
     },
