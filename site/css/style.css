@@ -2855,6 +2855,20 @@ main {
     font-size: 12px
   }
 
+  .burger {
+    background: rgba(255, 255, 255, .92);
+    border-color: rgba(255, 255, 255, .72);
+    box-shadow: 0 4px 18px rgba(24, 24, 20, .12);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px)
+  }
+
+  .burger span,
+  .burger span::before,
+  .burger span::after {
+    background: #1f201c
+  }
+
   .hero {
     min-height: 520px
   }
@@ -2939,6 +2953,23 @@ main {
     display: none
   }
 
+  .ct__left,
+  .ct__form {
+    grid-column: 1/13
+  }
+
+  .ct__left {
+    padding-bottom: 38px
+  }
+
+  .ct__form {
+    padding: clamp(22px, 6vw, 34px)
+  }
+
+  .ct__line a {
+    overflow-wrap: anywhere
+  }
+
   .works {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -2954,6 +2985,52 @@ main {
 
   .w:nth-child(even) {
     margin-top: 64px
+  }
+}
+
+@media(max-width:560px) {
+  .sec {
+    padding-block: 58px
+  }
+
+  #vases {
+    padding-top: 26px
+  }
+
+  .shead {
+    margin-bottom: 34px
+  }
+
+  .shead h2,
+  #contact .shead h2 {
+    font-size: clamp(26px, 9.5vw, 36px)
+  }
+
+  .cat {
+    grid-template-columns: 1fr;
+    gap: 42px
+  }
+
+  .cat__item:nth-child(n) {
+    grid-column: 1;
+    margin-top: 0
+  }
+
+  .cat__name {
+    font-size: 14px
+  }
+
+  .cat__price,
+  .cat__add {
+    font-size: 12px
+  }
+
+  .ct__line a {
+    font-size: clamp(20px, 7vw, 28px)
+  }
+
+  .ct__form {
+    margin-inline: calc(var(--gutter) * -.35)
   }
 }
 
