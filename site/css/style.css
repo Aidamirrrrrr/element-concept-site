@@ -438,7 +438,17 @@ section[id] {
   font-size: 18px;
   letter-spacing: .07em;
   text-transform: uppercase;
-  white-space: nowrap
+  white-space: nowrap;
+  display: flex;
+  align-items: center
+}
+
+.top__mark svg {
+  display: block;
+  height: 26px;
+  width: auto;
+  color: inherit;
+  transition: height .55s var(--ease)
 }
 
 .top__nav {
@@ -2322,6 +2332,10 @@ main {
   text-transform: uppercase
 }
 
+.top.is-scrolled .top__mark svg {
+  height: 22px
+}
+
 .top__nav {
   position: absolute;
   left: 50%;
@@ -2864,6 +2878,10 @@ main {
 
   .top__mark {
     font-size: 12px
+  }
+
+  .top__mark svg {
+    height: 20px
   }
 
   .burger {
