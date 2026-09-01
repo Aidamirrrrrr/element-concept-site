@@ -2475,6 +2475,17 @@ main {
   animation: hero-copy-in .9s .35s var(--ease-out) forwards
 }
 
+.hero__eyebrow a {
+  pointer-events: auto;
+  border-bottom: 1px solid rgba(255, 255, 255, .55);
+  transition: border-color .3s, opacity .3s
+}
+
+.hero__eyebrow a:hover {
+  border-color: #fff;
+  opacity: .72
+}
+
 .hero__wordmark {
   font-family: var(--body);
   font-size: clamp(82px, 16.8vw, 260px);
