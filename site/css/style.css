@@ -448,7 +448,8 @@ section[id] {
   height: 26px;
   width: auto;
   color: inherit;
-  transition: height .55s var(--ease)
+  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, .45));
+  transition: height .55s var(--ease), filter .45s ease
 }
 
 .top__nav {
@@ -2342,7 +2343,8 @@ main {
 }
 
 .top.is-scrolled .top__mark svg {
-  height: 22px
+  height: 22px;
+  filter: none
 }
 
 .top__nav {
