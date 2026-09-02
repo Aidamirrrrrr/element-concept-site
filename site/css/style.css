@@ -1321,6 +1321,11 @@ main {
   grid-column: 1/8
 }
 
+.ct__photo {
+  grid-column: 9/13;
+  aspect-ratio: 1680/1119
+}
+
 .ct__line {
   display: flex;
   align-items: center;
@@ -2989,6 +2994,10 @@ main {
   .ct__left {
     grid-column: 1/13;
     padding-bottom: 38px
+  }
+
+  .ct__photo {
+    grid-column: 1/13
   }
 
   .ct__line a,
