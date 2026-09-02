@@ -2582,7 +2582,7 @@ main {
 }
 
 .sec {
-  padding-block: clamp(90px, 12vw, 190px);
+  padding-block: clamp(78px, 6vw, 110px);
   background: #fff
 }
 
