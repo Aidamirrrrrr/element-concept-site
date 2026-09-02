@@ -1315,16 +1315,15 @@ main {
   display: grid;
   grid-template-columns: repeat(12, var(--col));
   gap: inherit;
-  align-items: start
+  align-items: stretch
 }
 
 .ct__left {
-  grid-column: 1/8
+  grid-column: 1/7
 }
 
 .ct__photo {
-  grid-column: 9/13;
-  aspect-ratio: 1680/1119
+  grid-column: 8/13
 }
 
 .ct__line {
@@ -2999,7 +2998,8 @@ main {
   }
 
   .ct__photo {
-    grid-column: 1/13
+    grid-column: 1/13;
+    aspect-ratio: 1680/1119
   }
 
   .ct__line a,
